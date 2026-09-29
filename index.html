@@ -264,35 +264,35 @@
   <script>
 
   /* 선물 파일 목록 */
-const gifts = [
-  "gift01.png",
-  "gift02.png",
-  "gift03.png",
-  "gift04.png",
-  "gift05.png",
-  "gift06.png",
-  "gift07.png",
-  "gift08.png",
-  "gift09.png",
-  "gift10.png",
-  "gift11.png",
-  "gift12.png",
-  "gift13.png",
-  "gift14.png",
-  "gift15.png",
-  "gift16.png",
-  "gift17.png",
-  "gift18.png",
-  "gift19.png",
-  "gift20.png",
-  "gift21.png",
-  "gift22.png",
-  "gift23.png",
-  "gift24.png",
-  "gift25.png",
-  "gift26.png",
-  "gift27.png"
-];
+  const gifts = [
+    "gift01.png",
+    "gift02.png",
+    "gift03.png",
+    "gift04.png",
+    "gift05.png",
+    "gift06.png",
+    "gift07.png",
+    "gift08.png",
+    "gift09.png",
+    "gift10.png",
+    "gift11.png",
+    "gift12.png",
+    "gift13.png",
+    "gift14.png",
+    "gift15.png",
+    "gift16.png",
+    "gift17.png",
+    "gift18.png",
+    "gift19.png",
+    "gift20.png",
+    "gift21.png",
+    "gift22.png",
+    "gift23.png",
+    "gift24.png",
+    "gift25.png",
+    "gift26.png",
+    "gift27.png"
+  ];
 
   const giftArea = document.getElementById("giftArea");
   const countText = document.getElementById("count");
@@ -300,7 +300,7 @@ const gifts = [
   const baekho = document.getElementById("baekho");
 
   let giftCount = 0;
-let smileTimer;
+  let smileTimer;
 
 
   /* 선물 27개 준비 */
@@ -308,10 +308,7 @@ let smileTimer;
 
     const img = document.createElement("img");
 
-    /* 한글과 공백이 들어간 파일명을 안전하게 변환 */
-    img.src = encodeURI(fileName);
-
-    /* 이미지가 없을 때 글자가 나타나지 않도록 함 */
+    img.src = fileName;
     img.alt = "";
 
     img.classList.add(
@@ -335,69 +332,53 @@ let smileTimer;
   }
 
 
-/* 선물 하나 추가 */
-function addGift() {
+  /* 선물 하나 추가 */
+  function addGift() {
 
-  /* 이번 사이클에서 몇 번째 선물인지 계산 */
-  const giftIndex = giftCount % gifts.length;
+    /* 이번 사이클에서 몇 번째 선물인지 계산 */
+    const giftIndex = giftCount % gifts.length;
 
-  const giftImages =
-    document.querySelectorAll(".gift-image");
-
-  /* 28번째, 55번째... 새로운 사이클이 시작되면 */
-  if (giftIndex === 0 && giftCount > 0) {
-
-    /* 기존 선물 전부 숨기기 */
-    giftImages.forEach((img) => {
-      img.classList.remove("show");
-    });
-  }
-
-  /* 이번 선물 보여주기 */
-  giftImages[giftIndex].classList.add("show");
-
-  /* 전체 제출 횟수는 계속 증가 */
-  giftCount++;
-
-  updateCount();
-
-
-  /* 선물이 들어올 때마다 백호가 3초 동안 웃음 */
-  baekho.src = "baekho_smile.png";
-  baekho.alt = "웃는 백호";
-
-  clearTimeout(smileTimer);
-
-  smileTimer = setTimeout(() => {
-    baekho.src = "baekho_work.png";
-    baekho.alt = "업무 중인 백호";
-  }, 3000);
-
-}
     const giftImages =
       document.querySelectorAll(".gift-image");
 
-    giftImages[giftCount].classList.add("show");
 
+    /* 28번째, 55번째... 새로운 사이클이 시작되면 */
+    if (giftIndex === 0 && giftCount > 0) {
+
+      giftImages.forEach((img) => {
+        img.classList.remove("show");
+      });
+
+    }
+
+
+    /* 이번 선물 보여주기 */
+    giftImages[giftIndex].classList.add("show");
+
+
+    /* 전체 제출 횟수는 계속 증가 */
     giftCount++;
 
     updateCount();
 
 
-/* 선물이 들어올 때마다 백호가 3초 동안 웃음 */
-baekho.src = "baekho_smile.png";
-baekho.alt = "웃는 백호";
+    /* 백호가 3초 동안 웃음 */
+    baekho.src = "baekho_smile.png";
+    baekho.alt = "웃는 백호";
 
-clearTimeout(smileTimer);
+    clearTimeout(smileTimer);
 
-smileTimer = setTimeout(() => {
-  baekho.src = "baekho_work.png";
-  baekho.alt = "업무 중인 백호";
-}, 3000);
+    smileTimer = setTimeout(() => {
+
+      baekho.src = "baekho_work.png";
+      baekho.alt = "업무 중인 백호";
+
+    }, 3000);
 
   }
 
 
+  /* 버튼 클릭 */
   button.addEventListener("click", addGift);
 
   updateCount();
