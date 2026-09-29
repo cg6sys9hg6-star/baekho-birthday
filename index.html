@@ -51,15 +51,14 @@
       background: #f7f5ef;
     }
 
+    /* 백호와 선물이 들어가는 공간 */
     .scene {
       position: relative;
-      min-height: 600px;
+      width: 100%;
+      aspect-ratio: 4 / 3;
       background: #d8d0c1;
       border: 3px solid #383838;
       overflow: hidden;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
     }
 
     .scene::before {
@@ -70,37 +69,153 @@
       font-size: 11px;
       letter-spacing: 2px;
       color: #777;
+      z-index: 100;
     }
 
+    /* 백호 */
     .baekho-image {
-  width: 100%;
-  max-width: 900px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      z-index: 1;
+    }
 
+    /* 선물들이 올라가는 공간 */
     .gift-area {
       position: absolute;
-      bottom: 20px;
-      left: 20px;
-      right: 20px;
-      height: 180px;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* 각각의 선물 이미지 */
+    .gift-image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      opacity: 0;
+      transition: opacity 0.5s ease;
       pointer-events: none;
     }
 
-    .gift {
-      position: absolute;
-      font-size: 42px;
+    .gift-image.show {
+      opacity: 1;
     }
 
-    .gift:nth-child(1) { left: 3%; bottom: 5px; }
-    .gift:nth-child(2) { left: 13%; bottom: 15px; }
-    .gift:nth-child(3) { left: 23%; bottom: 2px; }
-    .gift:nth-child(4) { right: 23%; bottom: 5px; }
-    .gift:nth-child(5) { right: 13%; bottom: 20px; }
-    .gift:nth-child(6) { right: 3%; bottom: 0; }
+    /* 선물 위치 */
+    .gift-01 {
+      transform: translate(-55%, 8%);
+    }
 
+    .gift-02 {
+      transform: translate(-38%, 6%);
+    }
+
+    .gift-03 {
+      transform: translate(-22%, 10%);
+    }
+
+    .gift-04 {
+      transform: translate(-8%, 5%);
+    }
+
+    .gift-05 {
+      transform: translate(8%, 10%);
+    }
+
+    .gift-06 {
+      transform: translate(22%, 5%);
+    }
+
+    .gift-07 {
+      transform: translate(-48%, -3%);
+    }
+
+    .gift-08 {
+      transform: translate(-30%, -2%);
+    }
+
+    .gift-09 {
+      transform: translate(-12%, -4%);
+    }
+
+    .gift-10 {
+      transform: translate(5%, -2%);
+    }
+
+    .gift-11 {
+      transform: translate(20%, -5%);
+    }
+
+    .gift-12 {
+      transform: translate(35%, -3%);
+    }
+
+    .gift-13 {
+      transform: translate(-43%, -12%);
+    }
+
+    .gift-14 {
+      transform: translate(-25%, -10%);
+    }
+
+    .gift-15 {
+      transform: translate(-7%, -12%);
+    }
+
+    .gift-16 {
+      transform: translate(12%, -10%);
+    }
+
+    .gift-17 {
+      transform: translate(28%, -13%);
+    }
+
+    .gift-18 {
+      transform: translate(-35%, -19%);
+    }
+
+    .gift-19 {
+      transform: translate(-17%, -18%);
+    }
+
+    .gift-20 {
+      transform: translate(1%, -20%);
+    }
+
+    .gift-21 {
+      transform: translate(18%, -18%);
+    }
+
+    .gift-22 {
+      transform: translate(-28%, -26%);
+    }
+
+    .gift-23 {
+      transform: translate(-10%, -25%);
+    }
+
+    .gift-24 {
+      transform: translate(8%, -27%);
+    }
+
+    .gift-25 {
+      transform: translate(-19%, -33%);
+    }
+
+    .gift-26 {
+      transform: translate(0%, -32%);
+    }
+
+    .gift-27 {
+      transform: translate(-8%, -39%);
+    }
+
+    /* 숫자 */
     .count {
       margin-top: 30px;
       font-size: 18px;
@@ -110,8 +225,10 @@
       display: block;
       font-size: 48px;
       margin-top: 5px;
+      letter-spacing: 3px;
     }
 
+    /* 버튼 */
     button {
       margin-top: 25px;
       padding: 14px 28px;
@@ -131,6 +248,40 @@
       font-size: 12px;
       color: #777;
     }
+
+    /* 작은 화면 */
+    @media (max-width: 600px) {
+      .container {
+        width: 96%;
+        padding-top: 20px;
+      }
+
+      .official {
+        font-size: 10px;
+      }
+
+      .subtitle {
+        font-size: 12px;
+      }
+
+      .notice {
+        font-size: 11px;
+      }
+
+      .scene::before {
+        top: 10px;
+        left: 10px;
+        font-size: 8px;
+      }
+
+      .count {
+        font-size: 15px;
+      }
+
+      .count strong {
+        font-size: 40px;
+      }
+    }
   </style>
 </head>
 
@@ -142,7 +293,10 @@
       大韓民國 檢察廳 · 특별보관 제2026-BH호
     </div>
 
-    <h1>백호 생일선물<br>압수물 보관소</h1>
+    <h1>
+      백호 생일선물<br>
+      압수물 보관소
+    </h1>
 
     <div class="subtitle">
       백호의 생일을 축하하기 위해 제출된 선물을 보관하고 있습니다.
@@ -154,26 +308,26 @@
 
     <section class="scene">
 
-      <img class="baekho-image" src="baekho_work.png" alt="업무 중인 백호">
+      <!-- 백호 -->
+      <img
+        id="baekho"
+        class="baekho-image"
+        src="baekho_work.png"
+        alt="업무 중인 백호"
+      >
 
-      <div class="gift-area">
-        <div class="gift">🎁</div>
-        <div class="gift">🎁</div>
-        <div class="gift">🎁</div>
-        <div class="gift">🎁</div>
-        <div class="gift">🎁</div>
-        <div class="gift">🎁</div>
-      </div>
+      <!-- 선물 -->
+      <div class="gift-area" id="giftArea"></div>
 
     </section>
 
     <div class="count">
       현재 보관 중인 압수물
-      <strong>000</strong>
+      <strong id="count">000</strong>
     </div>
 
-    <button>
-      🎁 생일선물 제출하기
+    <button id="giftButton">
+      🎁 생일선물 하나 추가해보기
     </button>
 
     <div class="footer">
@@ -182,6 +336,115 @@
     </div>
 
   </main>
+
+
+  <script>
+
+    /* 선물 파일 목록 */
+    const gifts = [
+      "일러스트 20260929.PNG",
+      "일러스트 20260929 2.PNG",
+      "일러스트 20260929 3.PNG",
+      "일러스트 20260929 4.PNG",
+      "일러스트 20260929 5.PNG",
+      "일러스트 20260929 6.PNG",
+      "일러스트 20260929 7.PNG",
+      "일러스트 20260929 8.PNG",
+      "일러스트 20260929 9.PNG",
+      "일러스트 20260929 10.PNG",
+      "일러스트 20260929 11.PNG",
+      "일러스트 20260929 12.PNG",
+      "일러스트 20260929 13.PNG",
+      "일러스트 20260929 14.PNG",
+      "일러스트 20260929 15.PNG",
+      "일러스트 20260929 16.PNG",
+      "일러스트 20260929 17.PNG",
+      "일러스트 20260929 18.PNG",
+      "일러스트 20260929 19.PNG",
+      "일러스트 20260929 20.PNG",
+      "일러스트 20260929 21.PNG",
+      "일러스트 20260929 22.PNG",
+      "일러스트 20260929 23.PNG",
+      "일러스트 20260929 24.PNG",
+      "일러스트 20260929 25.PNG",
+      "일러스트 20260929 26.PNG",
+      "일러스트 20260929 27.PNG"
+    ];
+
+    const giftArea = document.getElementById("giftArea");
+    const countText = document.getElementById("count");
+    const button = document.getElementById("giftButton");
+    const baekho = document.getElementById("baekho");
+
+    let giftCount = 0;
+
+
+    /* 선물 27개를 미리 준비 */
+    gifts.forEach((fileName, index) => {
+
+      const img = document.createElement("img");
+
+      img.src = fileName;
+      img.alt = "백호에게 제출된 생일선물 " + (index + 1);
+
+      img.classList.add(
+        "gift-image",
+        "gift-" + String(index + 1).padStart(2, "0")
+      );
+
+      img.style.zIndex = 10 + index;
+
+      giftArea.appendChild(img);
+
+    });
+
+
+    /* 숫자를 001, 002, 003 형태로 표시 */
+    function updateCount() {
+
+      countText.textContent =
+        String(giftCount).padStart(3, "0");
+
+    }
+
+
+    /* 선물을 하나 추가 */
+    function addGift() {
+
+      if (giftCount >= gifts.length) {
+        return;
+      }
+
+      const giftImages =
+        document.querySelectorAll(".gift-image");
+
+      giftImages[giftCount].classList.add("show");
+
+      giftCount++;
+
+      updateCount();
+
+
+      /* 27개가 모두 쌓이면 백호가 웃는다 */
+      if (giftCount === gifts.length) {
+
+        baekho.src = "baekho_smile.png";
+        baekho.alt = "웃는 백호";
+
+        button.textContent = "🎁 압수물 27개 보관 완료";
+
+        button.disabled = true;
+
+      }
+
+    }
+
+
+    button.addEventListener("click", addGift);
+
+    updateCount();
+
+  </script>
 
 </body>
 </html>
