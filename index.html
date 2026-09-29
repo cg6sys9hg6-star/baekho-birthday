@@ -340,111 +340,114 @@
 
   <script>
 
-    /* 선물 파일 목록 */
-    const gifts = [
-      "일러스트 20260929.PNG",
-      "일러스트 20260929 2.PNG",
-      "일러스트 20260929 3.PNG",
-      "일러스트 20260929 4.PNG",
-      "일러스트 20260929 5.PNG",
-      "일러스트 20260929 6.PNG",
-      "일러스트 20260929 7.PNG",
-      "일러스트 20260929 8.PNG",
-      "일러스트 20260929 9.PNG",
-      "일러스트 20260929 10.PNG",
-      "일러스트 20260929 11.PNG",
-      "일러스트 20260929 12.PNG",
-      "일러스트 20260929 13.PNG",
-      "일러스트 20260929 14.PNG",
-      "일러스트 20260929 15.PNG",
-      "일러스트 20260929 16.PNG",
-      "일러스트 20260929 17.PNG",
-      "일러스트 20260929 18.PNG",
-      "일러스트 20260929 19.PNG",
-      "일러스트 20260929 20.PNG",
-      "일러스트 20260929 21.PNG",
-      "일러스트 20260929 22.PNG",
-      "일러스트 20260929 23.PNG",
-      "일러스트 20260929 24.PNG",
-      "일러스트 20260929 25.PNG",
-      "일러스트 20260929 26.PNG",
-      "일러스트 20260929 27.PNG"
-    ];
+  /* 선물 파일 목록 */
+  const gifts = [
+    "일러스트 20260929.PNG",
+    "일러스트 20260929 2.PNG",
+    "일러스트 20260929 3.PNG",
+    "일러스트 20260929 4.PNG",
+    "일러스트 20260929 5.PNG",
+    "일러스트 20260929 6.PNG",
+    "일러스트 20260929 7.PNG",
+    "일러스트 20260929 8.PNG",
+    "일러스트 20260929 9.PNG",
+    "일러스트 20260929 10.PNG",
+    "일러스트 20260929 11.PNG",
+    "일러스트 20260929 12.PNG",
+    "일러스트 20260929 13.PNG",
+    "일러스트 20260929 14.PNG",
+    "일러스트 20260929 15.PNG",
+    "일러스트 20260929 16.PNG",
+    "일러스트 20260929 17.PNG",
+    "일러스트 20260929 18.PNG",
+    "일러스트 20260929 19.PNG",
+    "일러스트 20260929 20.PNG",
+    "일러스트 20260929 21.PNG",
+    "일러스트 20260929 22.PNG",
+    "일러스트 20260929 23.PNG",
+    "일러스트 20260929 24.PNG",
+    "일러스트 20260929 25.PNG",
+    "일러스트 20260929 26.PNG",
+    "일러스트 20260929 27.PNG"
+  ];
 
-    const giftArea = document.getElementById("giftArea");
-    const countText = document.getElementById("count");
-    const button = document.getElementById("giftButton");
-    const baekho = document.getElementById("baekho");
+  const giftArea = document.getElementById("giftArea");
+  const countText = document.getElementById("count");
+  const button = document.getElementById("giftButton");
+  const baekho = document.getElementById("baekho");
 
-    let giftCount = 0;
-
-
-    /* 선물 27개를 미리 준비 */
-    gifts.forEach((fileName, index) => {
-
-      const img = document.createElement("img");
-
-      img.src = fileName;
-      img.alt = "백호에게 제출된 생일선물 " + (index + 1);
-
-      img.classList.add(
-        "gift-image",
-        "gift-" + String(index + 1).padStart(2, "0")
-      );
-
-      img.style.zIndex = 10 + index;
-
-      giftArea.appendChild(img);
-
-    });
+  let giftCount = 0;
 
 
-    /* 숫자를 001, 002, 003 형태로 표시 */
-    function updateCount() {
+  /* 선물 27개 준비 */
+  gifts.forEach((fileName, index) => {
 
-      countText.textContent =
-        String(giftCount).padStart(3, "0");
+    const img = document.createElement("img");
 
+    /* 한글과 공백이 들어간 파일명을 안전하게 변환 */
+    img.src = encodeURI(fileName);
+
+    /* 이미지가 없을 때 글자가 나타나지 않도록 함 */
+    img.alt = "";
+
+    img.classList.add(
+      "gift-image",
+      "gift-" + String(index + 1).padStart(2, "0")
+    );
+
+    img.style.zIndex = 10 + index;
+
+    giftArea.appendChild(img);
+
+  });
+
+
+  /* 숫자 표시 */
+  function updateCount() {
+
+    countText.textContent =
+      String(giftCount).padStart(3, "0");
+
+  }
+
+
+  /* 선물 하나 추가 */
+  function addGift() {
+
+    if (giftCount >= gifts.length) {
+      return;
     }
 
+    const giftImages =
+      document.querySelectorAll(".gift-image");
 
-    /* 선물을 하나 추가 */
-    function addGift() {
+    giftImages[giftCount].classList.add("show");
 
-      if (giftCount >= gifts.length) {
-        return;
-      }
-
-      const giftImages =
-        document.querySelectorAll(".gift-image");
-
-      giftImages[giftCount].classList.add("show");
-
-      giftCount++;
-
-      updateCount();
-
-
-      /* 27개가 모두 쌓이면 백호가 웃는다 */
-      if (giftCount === gifts.length) {
-
-        baekho.src = "baekho_smile.png";
-        baekho.alt = "웃는 백호";
-
-        button.textContent = "🎁 압수물 27개 보관 완료";
-
-        button.disabled = true;
-
-      }
-
-    }
-
-
-    button.addEventListener("click", addGift);
+    giftCount++;
 
     updateCount();
 
-  </script>
 
+    /* 27개가 모두 쌓이면 백호가 웃음 */
+    if (giftCount === gifts.length) {
+
+      baekho.src = "baekho_smile.png";
+      baekho.alt = "웃는 백호";
+
+      button.textContent =
+        "🎁 압수물 27개 보관 완료";
+
+      button.disabled = true;
+
+    }
+
+  }
+
+
+  button.addEventListener("click", addGift);
+
+  updateCount();
+
+</script>
 </body>
 </html>
