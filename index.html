@@ -335,13 +335,45 @@ let smileTimer;
   }
 
 
-  /* 선물 하나 추가 */
-  function addGift() {
+/* 선물 하나 추가 */
+function addGift() {
 
-    if (giftCount >= gifts.length) {
-      return;
-    }
+  /* 이번 사이클에서 몇 번째 선물인지 계산 */
+  const giftIndex = giftCount % gifts.length;
 
+  const giftImages =
+    document.querySelectorAll(".gift-image");
+
+  /* 28번째, 55번째... 새로운 사이클이 시작되면 */
+  if (giftIndex === 0 && giftCount > 0) {
+
+    /* 기존 선물 전부 숨기기 */
+    giftImages.forEach((img) => {
+      img.classList.remove("show");
+    });
+  }
+
+  /* 이번 선물 보여주기 */
+  giftImages[giftIndex].classList.add("show");
+
+  /* 전체 제출 횟수는 계속 증가 */
+  giftCount++;
+
+  updateCount();
+
+
+  /* 선물이 들어올 때마다 백호가 3초 동안 웃음 */
+  baekho.src = "baekho_smile.png";
+  baekho.alt = "웃는 백호";
+
+  clearTimeout(smileTimer);
+
+  smileTimer = setTimeout(() => {
+    baekho.src = "baekho_work.png";
+    baekho.alt = "업무 중인 백호";
+  }, 3000);
+
+}
     const giftImages =
       document.querySelectorAll(".gift-image");
 
