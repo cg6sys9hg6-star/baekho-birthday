@@ -377,6 +377,7 @@ const gifts = [
   const baekho = document.getElementById("baekho");
 
   let giftCount = 0;
+let smileTimer;
 
 
   /* 선물 27개 준비 */
@@ -428,18 +429,16 @@ const gifts = [
     updateCount();
 
 
-    /* 27개가 모두 쌓이면 백호가 웃음 */
-    if (giftCount === gifts.length) {
+/* 선물이 들어올 때마다 백호가 3초 동안 웃음 */
+baekho.src = "baekho_smile.png";
+baekho.alt = "웃는 백호";
 
-      baekho.src = "baekho_smile.png";
-      baekho.alt = "웃는 백호";
+clearTimeout(smileTimer);
 
-      button.textContent =
-        "🎁 압수물 27개 보관 완료";
-
-      button.disabled = true;
-
-    }
+smileTimer = setTimeout(() => {
+  baekho.src = "baekho_work.png";
+  baekho.alt = "업무 중인 백호";
+}, 3000);
 
   }
 
