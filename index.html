@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>백호 생일선물 압수물 보관소</title>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     * {
@@ -91,52 +95,52 @@
       z-index: 10;
     }
 
-.gift-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-}
+    .gift-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
 
     .gift-image.show {
       opacity: 1;
     }
 
     /* 선물 위치 */
-.gift-01,
-.gift-02,
-.gift-03,
-.gift-04,
-.gift-05,
-.gift-06,
-.gift-07,
-.gift-08,
-.gift-09,
-.gift-10,
-.gift-11,
-.gift-12,
-.gift-13,
-.gift-14,
-.gift-15,
-.gift-16,
-.gift-17,
-.gift-18,
-.gift-19,
-.gift-20,
-.gift-21,
-.gift-22,
-.gift-23,
-.gift-24,
-.gift-25,
-.gift-26,
-.gift-27 {
-  transform: none;
-}
+    .gift-01,
+    .gift-02,
+    .gift-03,
+    .gift-04,
+    .gift-05,
+    .gift-06,
+    .gift-07,
+    .gift-08,
+    .gift-09,
+    .gift-10,
+    .gift-11,
+    .gift-12,
+    .gift-13,
+    .gift-14,
+    .gift-15,
+    .gift-16,
+    .gift-17,
+    .gift-18,
+    .gift-19,
+    .gift-20,
+    .gift-21,
+    .gift-22,
+    .gift-23,
+    .gift-24,
+    .gift-25,
+    .gift-26,
+    .gift-27 {
+      transform: none;
+    }
 
     /* 숫자 */
     .count {
@@ -153,7 +157,7 @@
 
     /* 버튼 */
     button {
-      margin-top: 25px;
+      margin-top: 20px;
       padding: 14px 28px;
       border: 2px solid #333;
       background: #333;
@@ -164,6 +168,120 @@
 
     button:hover {
       background: #555;
+    }
+
+    .view-button {
+      margin-left: 8px;
+      background: #f7f5ef;
+      color: #333;
+    }
+
+    .view-button:hover {
+      background: #ddd8cd;
+    }
+
+    /* 메시지 입력 / 압수물 목록 */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 1000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-box {
+      width: min(600px, 100%);
+      max-height: 85vh;
+      overflow-y: auto;
+      background: #f7f5ef;
+      border: 3px solid #333;
+      padding: 25px;
+      text-align: left;
+    }
+
+    .modal-title {
+      margin: 0 0 18px;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .message-input {
+      width: 100%;
+      min-height: 150px;
+      padding: 14px;
+      border: 1px solid #777;
+      background: white;
+      font-family: inherit;
+      font-size: 16px;
+      resize: vertical;
+    }
+
+    .message-input:focus {
+      outline: 2px solid #555;
+    }
+
+    .modal-buttons {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .modal-buttons button {
+      margin-top: 0;
+    }
+
+    .close-button {
+      background: #777;
+    }
+
+    .message-list {
+      margin-top: 10px;
+    }
+
+    .message-item {
+      border-top: 1px solid #aaa;
+      padding: 16px 4px;
+    }
+
+    .message-number {
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: #777;
+      margin-bottom: 7px;
+    }
+
+    .message-text {
+      font-family: Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px 0;
+      color: #777;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px 0;
+      color: #777;
+    }
+
+    .error-message {
+      margin-top: 12px;
+      color: #8b0000;
+      font-size: 13px;
+      text-align: center;
     }
 
     .footer {
@@ -203,6 +321,24 @@
 
       .count strong {
         font-size: 40px;
+      }
+
+      button {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 10px;
+      }
+
+      .view-button {
+        margin-left: 0;
+      }
+
+      .modal {
+        padding: 10px;
+      }
+
+      .modal-box {
+        padding: 18px;
       }
     }
   </style>
@@ -250,7 +386,11 @@
     </div>
 
     <button id="giftButton">
-      🎁 생일선물 하나 추가해보기
+      🎁 생일선물 제출하기
+    </button>
+
+    <button id="viewButton" class="view-button">
+      📦 압수물 구경하기
     </button>
 
     <div class="footer">
@@ -261,128 +401,668 @@
   </main>
 
 
+  <!-- 메시지 제출 창 -->
+  <div class="modal" id="submitModal">
+
+    <div class="modal-box">
+
+      <h2 class="modal-title">
+        압수물 제출
+      </h2>
+
+      <textarea
+        id="messageInput"
+        class="message-input"
+        maxlength="1000"
+        placeholder="백호에게 전하고 싶은 말을 남겨주세요."
+      ></textarea>
+
+      <div class="modal-buttons">
+
+        <button id="submitMessageButton">
+          제출하기
+        </button>
+
+        <button id="closeSubmitButton" class="close-button">
+          취소
+        </button>
+
+      </div>
+
+      <div id="submitError" class="error-message"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- 압수물 구경하기 -->
+  <div class="modal" id="viewModal">
+
+    <div class="modal-box">
+
+      <h2 class="modal-title">
+        📦 압수물 보관 목록
+      </h2>
+
+      <div id="messageList" class="message-list">
+        <div class="loading">
+          압수물 목록을 불러오는 중...
+        </div>
+      </div>
+
+      <div class="modal-buttons">
+
+        <button id="closeViewButton" class="close-button">
+          닫기
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
   <script>
 
-  /* 선물 파일 목록 */
-  const gifts = [
-    "gift01.png",
-    "gift02.png",
-    "gift03.png",
-    "gift04.png",
-    "gift05.png",
-    "gift06.png",
-    "gift07.png",
-    "gift08.png",
-    "gift09.png",
-    "gift10.png",
-    "gift11.png",
-    "gift12.png",
-    "gift13.png",
-    "gift14.png",
-    "gift15.png",
-    "gift16.png",
-    "gift17.png",
-    "gift18.png",
-    "gift19.png",
-    "gift20.png",
-    "gift21.png",
-    "gift22.png",
-    "gift23.png",
-    "gift24.png",
-    "gift25.png",
-    "gift26.png",
-    "gift27.png"
-  ];
+    /* =====================================================
+       🔑 SUPABASE 연결 정보
+       아래 두 곳만 티캣님의 값으로 바꾸세요.
+       ===================================================== */
 
-  const giftArea = document.getElementById("giftArea");
-  const countText = document.getElementById("count");
-  const button = document.getElementById("giftButton");
-  const baekho = document.getElementById("baekho");
+    const SUPABASE_URL =
+      "https://avywoxtrzisfyjtsamtv.supabase.co/rest/v1/";
 
-  let giftCount = 0;
-  let smileTimer;
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_8FPmmGNkaNOSHpRTWJZ6Tw_fzVSgrjP
+";
 
 
-  /* 선물 27개 준비 */
-  gifts.forEach((fileName, index) => {
-
-    const img = document.createElement("img");
-
-    img.src = fileName;
-    img.alt = "";
-
-    img.classList.add(
-      "gift-image",
-      "gift-" + String(index + 1).padStart(2, "0")
-    );
-
-    img.style.zIndex = 10 + index;
-
-    giftArea.appendChild(img);
-
-  });
+    const { createClient } =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
 
 
-  /* 숫자 표시 */
-  function updateCount() {
+    /* =====================================================
+       선물 파일 목록
+       ===================================================== */
 
-    countText.textContent =
-      String(giftCount).padStart(3, "0");
+    const gifts = [
+      "gift01.png",
+      "gift02.png",
+      "gift03.png",
+      "gift04.png",
+      "gift05.png",
+      "gift06.png",
+      "gift07.png",
+      "gift08.png",
+      "gift09.png",
+      "gift10.png",
+      "gift11.png",
+      "gift12.png",
+      "gift13.png",
+      "gift14.png",
+      "gift15.png",
+      "gift16.png",
+      "gift17.png",
+      "gift18.png",
+      "gift19.png",
+      "gift20.png",
+      "gift21.png",
+      "gift22.png",
+      "gift23.png",
+      "gift24.png",
+      "gift25.png",
+      "gift26.png",
+      "gift27.png"
+    ];
 
-  }
+
+    /* =====================================================
+       화면 요소
+       ===================================================== */
+
+    const giftArea =
+      document.getElementById("giftArea");
+
+    const countText =
+      document.getElementById("count");
+
+    const button =
+      document.getElementById("giftButton");
+
+    const viewButton =
+      document.getElementById("viewButton");
+
+    const baekho =
+      document.getElementById("baekho");
+
+    const submitModal =
+      document.getElementById("submitModal");
+
+    const viewModal =
+      document.getElementById("viewModal");
+
+    const messageInput =
+      document.getElementById("messageInput");
+
+    const submitMessageButton =
+      document.getElementById("submitMessageButton");
+
+    const closeSubmitButton =
+      document.getElementById("closeSubmitButton");
+
+    const closeViewButton =
+      document.getElementById("closeViewButton");
+
+    const messageList =
+      document.getElementById("messageList");
+
+    const submitError =
+      document.getElementById("submitError");
 
 
-  /* 선물 하나 추가 */
-  function addGift() {
-
-    /* 이번 사이클에서 몇 번째 선물인지 계산 */
-    const giftIndex = giftCount % gifts.length;
-
-    const giftImages =
-      document.querySelectorAll(".gift-image");
+    let giftCount = 0;
+    let smileTimer;
 
 
-    /* 28번째, 55번째... 새로운 사이클이 시작되면 */
-    if (giftIndex === 0 && giftCount > 0) {
+    /* =====================================================
+       선물 27개 준비
+       ===================================================== */
+
+    gifts.forEach((fileName, index) => {
+
+      const img =
+        document.createElement("img");
+
+      img.src = fileName;
+      img.alt = "";
+
+      img.classList.add(
+        "gift-image",
+        "gift-" +
+        String(index + 1).padStart(2, "0")
+      );
+
+      img.style.zIndex =
+        10 + index;
+
+      giftArea.appendChild(img);
+
+    });
+
+
+    /* =====================================================
+       숫자 표시
+       ===================================================== */
+
+    function updateCount() {
+
+      countText.textContent =
+        String(giftCount).padStart(3, "0");
+
+    }
+
+
+    /* =====================================================
+       현재까지의 선물 상태 표시
+       ===================================================== */
+
+    function showGiftState() {
+
+      const giftImages =
+        document.querySelectorAll(".gift-image");
 
       giftImages.forEach((img) => {
         img.classList.remove("show");
       });
 
+
+      if (giftCount === 0) {
+        return;
+      }
+
+
+      const visibleCount =
+        giftCount % gifts.length;
+
+
+      if (visibleCount === 0) {
+
+        giftImages.forEach((img) => {
+          img.classList.add("show");
+        });
+
+        return;
+      }
+
+
+      for (let i = 0; i < visibleCount; i++) {
+
+        giftImages[i].classList.add("show");
+
+      }
+
     }
 
 
-    /* 이번 선물 보여주기 */
-    giftImages[giftIndex].classList.add("show");
+    /* =====================================================
+       Supabase에서 전체 압수물 개수 가져오기
+       ===================================================== */
+
+    async function loadCount() {
+
+      const { count, error } =
+        await supabase
+          .from("messages")
+          .select("*", {
+            count: "exact",
+            head: true
+          });
 
 
-    /* 전체 제출 횟수는 계속 증가 */
-    giftCount++;
+      if (error) {
 
-    updateCount();
+        console.error(error);
 
+        countText.textContent = "---";
 
-    /* 백호가 3초 동안 웃음 */
-    baekho.src = "baekho_smile.png";
-    baekho.alt = "웃는 백호";
+        return;
 
-    clearTimeout(smileTimer);
-
-    smileTimer = setTimeout(() => {
-
-      baekho.src = "baekho_work.png";
-      baekho.alt = "업무 중인 백호";
-
-    }, 3000);
-
-  }
+      }
 
 
-  /* 버튼 클릭 */
-  button.addEventListener("click", addGift);
+      giftCount = count || 0;
 
-  updateCount();
+      updateCount();
 
-</script>
+      showGiftState();
+
+    }
+
+
+    /* =====================================================
+       백호 웃기
+       ===================================================== */
+
+    function makeBaekhoSmile() {
+
+      baekho.src =
+        "baekho_smile.png";
+
+      baekho.alt =
+        "웃는 백호";
+
+
+      clearTimeout(smileTimer);
+
+
+      smileTimer =
+        setTimeout(() => {
+
+          baekho.src =
+            "baekho_work.png";
+
+          baekho.alt =
+            "업무 중인 백호";
+
+        }, 3000);
+
+    }
+
+
+    /* =====================================================
+       선물 하나 추가
+       ===================================================== */
+
+    function showNewGift() {
+
+      const giftImages =
+        document.querySelectorAll(".gift-image");
+
+
+      const giftIndex =
+        (giftCount - 1) % gifts.length;
+
+
+      /*
+        새로운 27개 사이클이 시작되면
+        기존 선물을 모두 숨깁니다.
+      */
+
+      if (giftIndex === 0 && giftCount > 1) {
+
+        giftImages.forEach((img) => {
+          img.classList.remove("show");
+        });
+
+      }
+
+
+      giftImages[giftIndex]
+        .classList.add("show");
+
+    }
+
+
+    /* =====================================================
+       메시지 제출
+       ===================================================== */
+
+    async function submitMessage() {
+
+      const message =
+        messageInput.value.trim();
+
+
+      submitError.textContent = "";
+
+
+      if (!message) {
+
+        submitError.textContent =
+          "메시지를 입력해주세요.";
+
+        return;
+
+      }
+
+
+      submitMessageButton.disabled = true;
+
+      submitMessageButton.textContent =
+        "제출 중...";
+
+
+      const { error } =
+        await supabase
+          .from("messages")
+          .insert({
+            message: message
+          });
+
+
+      if (error) {
+
+        console.error(error);
+
+        submitError.textContent =
+          "제출에 실패했습니다. 잠시 후 다시 시도해주세요.";
+
+        submitMessageButton.disabled = false;
+
+        submitMessageButton.textContent =
+          "제출하기";
+
+        return;
+
+      }
+
+
+      /*
+        제출 성공
+      */
+
+      messageInput.value = "";
+
+      submitModal.classList.remove("show");
+
+
+      /*
+        실제 DB의 전체 개수를 다시 가져옵니다.
+      */
+
+      await loadCount();
+
+
+      /*
+        방금 추가된 선물을 보여줍니다.
+      */
+
+      showNewGift();
+
+
+      /*
+        백호가 3초간 웃습니다.
+      */
+
+      makeBaekhoSmile();
+
+
+      submitMessageButton.disabled = false;
+
+      submitMessageButton.textContent =
+        "제출하기";
+
+    }
+
+
+    /* =====================================================
+       압수물 전체 불러오기
+       ===================================================== */
+
+    async function loadMessages() {
+
+      messageList.innerHTML =
+        '<div class="loading">압수물 목록을 불러오는 중...</div>';
+
+
+      const { data, error } =
+        await supabase
+          .from("messages")
+          .select("id, message, created_at")
+          .order("created_at", {
+            ascending: true
+          });
+
+
+      if (error) {
+
+        console.error(error);
+
+        messageList.innerHTML =
+          '<div class="empty">압수물 목록을 불러오지 못했습니다.</div>';
+
+        return;
+
+      }
+
+
+      if (!data || data.length === 0) {
+
+        messageList.innerHTML =
+          '<div class="empty">아직 제출된 압수물이 없습니다.</div>';
+
+        return;
+
+      }
+
+
+      messageList.innerHTML = "";
+
+
+      data.forEach((item, index) => {
+
+        const messageItem =
+          document.createElement("div");
+
+        messageItem.className =
+          "message-item";
+
+
+        const number =
+          document.createElement("div");
+
+        number.className =
+          "message-number";
+
+        number.textContent =
+          "NO." +
+          String(index + 1).padStart(3, "0");
+
+
+        const text =
+          document.createElement("div");
+
+        text.className =
+          "message-text";
+
+        /*
+          textContent를 사용해서
+          HTML 태그가 실행되지 않도록 합니다.
+        */
+
+        text.textContent =
+          item.message;
+
+
+        messageItem.appendChild(number);
+        messageItem.appendChild(text);
+
+        messageList.appendChild(messageItem);
+
+      });
+
+    }
+
+
+    /* =====================================================
+       제출창 열기
+       ===================================================== */
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        submitError.textContent = "";
+
+        submitModal.classList.add("show");
+
+        setTimeout(() => {
+          messageInput.focus();
+        }, 100);
+
+      }
+    );
+
+
+    /* =====================================================
+       제출창 닫기
+       ===================================================== */
+
+    closeSubmitButton.addEventListener(
+      "click",
+      () => {
+
+        submitModal.classList.remove("show");
+
+      }
+    );
+
+
+    /* =====================================================
+       압수물 구경하기
+       ===================================================== */
+
+    viewButton.addEventListener(
+      "click",
+      async () => {
+
+        viewModal.classList.add("show");
+
+        await loadMessages();
+
+      }
+    );
+
+
+    /* =====================================================
+       목록 닫기
+       ===================================================== */
+
+    closeViewButton.addEventListener(
+      "click",
+      () => {
+
+        viewModal.classList.remove("show");
+
+      }
+    );
+
+
+    /* =====================================================
+       제출
+       ===================================================== */
+
+    submitMessageButton.addEventListener(
+      "click",
+      submitMessage
+    );
+
+
+    /* =====================================================
+       Ctrl/Enter 또는 Cmd/Enter로 제출
+       ===================================================== */
+
+    messageInput.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (
+          (event.ctrlKey || event.metaKey) &&
+          event.key === "Enter"
+        ) {
+
+          submitMessage();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       바깥쪽 클릭으로 모달 닫기
+       ===================================================== */
+
+    submitModal.addEventListener(
+      "click",
+      (event) => {
+
+        if (event.target === submitModal) {
+
+          submitModal.classList.remove("show");
+
+        }
+
+      }
+    );
+
+
+    viewModal.addEventListener(
+      "click",
+      (event) => {
+
+        if (event.target === viewModal) {
+
+          viewModal.classList.remove("show");
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       처음 사이트를 열었을 때
+       ===================================================== */
+
+    loadCount();
+
+  </script>
+
 </body>
 </html>
