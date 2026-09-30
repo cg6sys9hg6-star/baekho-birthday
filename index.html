@@ -278,7 +278,7 @@
 
 .archive-table {
   width: 100%;
-  min-width: 560px;
+  min-width: 0;
   border-collapse: collapse;
   table-layout: fixed;
   font-family: Arial, sans-serif;
@@ -302,27 +302,27 @@
 }
 
 .archive-table .number-cell {
-  width: 75px;
+  width: 62px;
   text-align: center;
   font-family: "Courier New", monospace;
   white-space: nowrap;
 }
 
 .archive-table .date-cell {
-  width: 145px;
+  width: 125px;
   text-align: center;
   white-space: nowrap;
   font-size: 11px;
 }
 
 .archive-table .type-cell {
-  width: 115px;
+  width: 105px;
   text-align: center;
   white-space: nowrap;
 }
 
 .archive-table .status-cell {
-  width: 75px;
+  width: 65px;
   text-align: center;
   white-space: nowrap;
 }
@@ -1252,17 +1252,27 @@
         );
 
 
-      dateCell.textContent =
-        date.toLocaleString(
-          "ko-KR",
-          {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit"
-          }
-        );
+      const year =
+  date.getFullYear();
+
+const month =
+  String(date.getMonth() + 1)
+    .padStart(2, "0");
+
+const day =
+  String(date.getDate())
+    .padStart(2, "0");
+
+const hours =
+  String(date.getHours())
+    .padStart(2, "0");
+
+const minutes =
+  String(date.getMinutes())
+    .padStart(2, "0");
+
+dateCell.textContent =
+  `${year}.${month}.${day} ${hours}:${minutes}`;
 
 
       /*
