@@ -180,7 +180,7 @@
       background: #ddd8cd;
     }
 
-    /* 메시지 입력 / 압수물 목록 */
+    /* 모달 */
     .modal {
       display: none;
       position: fixed;
@@ -213,6 +213,7 @@
       text-align: center;
     }
 
+    /* 메시지 입력 */
     .message-input {
       width: 100%;
       min-height: 150px;
@@ -241,6 +242,7 @@
       background: #777;
     }
 
+    /* 압수물 목록 */
     .message-list {
       margin-top: 10px;
     }
@@ -292,6 +294,7 @@
 
     /* 작은 화면 */
     @media (max-width: 600px) {
+
       .container {
         width: 96%;
         padding-top: 20px;
@@ -344,6 +347,7 @@
   </style>
 </head>
 
+
 <body>
 
   <main class="container">
@@ -365,9 +369,10 @@
       본 보관소의 모든 압수물은 백호에게 전달될 예정입니다.
     </div>
 
+
+    <!-- 백호 + 선물 -->
     <section class="scene">
 
-      <!-- 백호 -->
       <img
         id="baekho"
         class="baekho-image"
@@ -375,23 +380,32 @@
         alt="업무 중인 백호"
       >
 
-      <!-- 선물 -->
-      <div class="gift-area" id="giftArea"></div>
+      <div
+        class="gift-area"
+        id="giftArea">
+      </div>
 
     </section>
 
+
+    <!-- 숫자 -->
     <div class="count">
       현재 보관 중인 압수물
       <strong id="count">000</strong>
     </div>
 
+
+    <!-- 버튼 -->
     <button id="giftButton">
       🎁 생일선물 제출하기
     </button>
 
-    <button id="viewButton" class="view-button">
+    <button
+      id="viewButton"
+      class="view-button">
       📦 압수물 구경하기
     </button>
+
 
     <div class="footer">
       CASE NO. BH-2026-BIRTHDAY<br>
@@ -401,8 +415,14 @@
   </main>
 
 
-  <!-- 메시지 제출 창 -->
-  <div class="modal" id="submitModal">
+
+  <!-- =====================================================
+       메시지 제출창
+       ===================================================== -->
+
+  <div
+    class="modal"
+    id="submitModal">
 
     <div class="modal-box">
 
@@ -423,21 +443,32 @@
           제출하기
         </button>
 
-        <button id="closeSubmitButton" class="close-button">
+        <button
+          id="closeSubmitButton"
+          class="close-button">
           취소
         </button>
 
       </div>
 
-      <div id="submitError" class="error-message"></div>
+      <div
+        id="submitError"
+        class="error-message">
+      </div>
 
     </div>
 
   </div>
 
 
-  <!-- 압수물 구경하기 -->
-  <div class="modal" id="viewModal">
+
+  <!-- =====================================================
+       압수물 구경하기
+       ===================================================== -->
+
+  <div
+    class="modal"
+    id="viewModal">
 
     <div class="modal-box">
 
@@ -445,15 +476,21 @@
         📦 압수물 보관 목록
       </h2>
 
-      <div id="messageList" class="message-list">
+      <div
+        id="messageList"
+        class="message-list">
+
         <div class="loading">
           압수물 목록을 불러오는 중...
         </div>
+
       </div>
 
       <div class="modal-buttons">
 
-        <button id="closeViewButton" class="close-button">
+        <button
+          id="closeViewButton"
+          class="close-button">
           닫기
         </button>
 
@@ -464,33 +501,45 @@
   </div>
 
 
+
   <script>
 
     /* =====================================================
-       🔑 SUPABASE 연결 정보
-       아래 두 곳만 티캣님의 값으로 바꾸세요.
-       ===================================================== */
+       SUPABASE 연결
+       =====================================================
+
+       ⚠️ 아래 두 곳만 본인의 값을 넣으세요.
+
+       URL에는 반드시
+       https://....supabase.co
+       까지만 들어갑니다.
+
+       /rest/v1/ 를 붙이지 않습니다.
+    */
+
 
     const SUPABASE_URL =
-      "https://avywoxtrzisfyjtsamtv.supabase.co/rest/v1/";
+      "https://avywoxtrzisfyjtsamtv.supabase.co";
+
 
     const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_8FPmmGNkaNOSHpRTWJZ6Tw_fzVSgrjP
-";
+      "sb_publishable_8FPmmGNkaNOSHpRTWJZ6Tw_fzVSgrjP";
 
 
-const supabaseClient =
-  supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+    const supabaseClient =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
+
 
 
     /* =====================================================
-       선물 파일 목록
+       선물 파일
        ===================================================== */
 
     const gifts = [
+
       "gift01.png",
       "gift02.png",
       "gift03.png",
@@ -518,7 +567,9 @@ const supabaseClient =
       "gift25.png",
       "gift26.png",
       "gift27.png"
+
     ];
+
 
 
     /* =====================================================
@@ -531,7 +582,7 @@ const supabaseClient =
     const countText =
       document.getElementById("count");
 
-    const button =
+    const giftButton =
       document.getElementById("giftButton");
 
     const viewButton =
@@ -550,49 +601,67 @@ const supabaseClient =
       document.getElementById("messageInput");
 
     const submitMessageButton =
-      document.getElementById("submitMessageButton");
+      document.getElementById(
+        "submitMessageButton"
+      );
 
     const closeSubmitButton =
-      document.getElementById("closeSubmitButton");
+      document.getElementById(
+        "closeSubmitButton"
+      );
 
     const closeViewButton =
-      document.getElementById("closeViewButton");
+      document.getElementById(
+        "closeViewButton"
+      );
 
     const messageList =
-      document.getElementById("messageList");
+      document.getElementById(
+        "messageList"
+      );
 
     const submitError =
-      document.getElementById("submitError");
+      document.getElementById(
+        "submitError"
+      );
+
 
 
     let giftCount = 0;
+
     let smileTimer;
 
 
+
     /* =====================================================
-       선물 27개 준비
+       선물 이미지 준비
        ===================================================== */
 
-    gifts.forEach((fileName, index) => {
+    gifts.forEach(
+      (fileName, index) => {
 
-      const img =
-        document.createElement("img");
+        const img =
+          document.createElement("img");
 
-      img.src = fileName;
-      img.alt = "";
+        img.src = fileName;
 
-      img.classList.add(
-        "gift-image",
-        "gift-" +
-        String(index + 1).padStart(2, "0")
-      );
+        img.alt = "";
 
-      img.style.zIndex =
-        10 + index;
+        img.classList.add(
+          "gift-image",
+          "gift-" +
+          String(index + 1)
+            .padStart(2, "0")
+        );
 
-      giftArea.appendChild(img);
+        img.style.zIndex =
+          10 + index;
 
-    });
+        giftArea.appendChild(img);
+
+      }
+    );
+
 
 
     /* =====================================================
@@ -602,23 +671,34 @@ const supabaseClient =
     function updateCount() {
 
       countText.textContent =
-        String(giftCount).padStart(3, "0");
+        String(giftCount)
+          .padStart(3, "0");
 
     }
 
 
+
     /* =====================================================
-       현재까지의 선물 상태 표시
+       현재까지 선물 보여주기
        ===================================================== */
 
     function showGiftState() {
 
       const giftImages =
-        document.querySelectorAll(".gift-image");
+        document.querySelectorAll(
+          ".gift-image"
+        );
 
-      giftImages.forEach((img) => {
-        img.classList.remove("show");
-      });
+
+      giftImages.forEach(
+        (img) => {
+
+          img.classList.remove(
+            "show"
+          );
+
+        }
+      );
 
 
       if (giftCount === 0) {
@@ -630,33 +710,56 @@ const supabaseClient =
         giftCount % gifts.length;
 
 
+      /*
+        27개가 꽉 찬 경우
+        27개 모두 보여줍니다.
+      */
+
       if (visibleCount === 0) {
 
-        giftImages.forEach((img) => {
-          img.classList.add("show");
-        });
+        giftImages.forEach(
+          (img) => {
+
+            img.classList.add(
+              "show"
+            );
+
+          }
+        );
 
         return;
+
       }
 
 
-      for (let i = 0; i < visibleCount; i++) {
+      /*
+        현재 사이클의
+        선물 개수만큼 보여줍니다.
+      */
 
-        giftImages[i].classList.add("show");
+      for (
+        let i = 0;
+        i < visibleCount;
+        i++
+      ) {
+
+        giftImages[i]
+          .classList.add("show");
 
       }
 
     }
 
 
+
     /* =====================================================
-       Supabase에서 전체 압수물 개수 가져오기
+       Supabase에서 전체 개수 가져오기
        ===================================================== */
 
     async function loadCount() {
 
-      const { count, error } =
-        await supabasClient
+      const result =
+        await supabaseClient
           .from("messages")
           .select("*", {
             count: "exact",
@@ -664,24 +767,38 @@ const supabaseClient =
           });
 
 
+      const count =
+        result.count;
+
+      const error =
+        result.error;
+
+
       if (error) {
 
-        console.error(error);
+        console.error(
+          "COUNT ERROR:",
+          error
+        );
 
-        countText.textContent = "---";
+        countText.textContent =
+          "---";
 
         return;
 
       }
 
 
-      giftCount = count || 0;
+      giftCount =
+        count || 0;
+
 
       updateCount();
 
       showGiftState();
 
     }
+
 
 
     /* =====================================================
@@ -697,47 +814,65 @@ const supabaseClient =
         "웃는 백호";
 
 
-      clearTimeout(smileTimer);
+      clearTimeout(
+        smileTimer
+      );
 
 
       smileTimer =
-        setTimeout(() => {
+        setTimeout(
+          () => {
 
-          baekho.src =
-            "baekho_work.png";
+            baekho.src =
+              "baekho_work.png";
 
-          baekho.alt =
-            "업무 중인 백호";
+            baekho.alt =
+              "업무 중인 백호";
 
-        }, 3000);
+          },
+          3000
+        );
 
     }
 
 
+
     /* =====================================================
-       선물 하나 추가
+       방금 추가된 선물 보여주기
        ===================================================== */
 
     function showNewGift() {
 
       const giftImages =
-        document.querySelectorAll(".gift-image");
+        document.querySelectorAll(
+          ".gift-image"
+        );
 
 
       const giftIndex =
-        (giftCount - 1) % gifts.length;
+        (giftCount - 1)
+        % gifts.length;
 
 
       /*
-        새로운 27개 사이클이 시작되면
-        기존 선물을 모두 숨깁니다.
+        28번째, 55번째...
+        새로운 사이클 시작
       */
 
-      if (giftIndex === 0 && giftCount > 1) {
+      if (
+        giftIndex === 0 &&
+        giftCount > 1
+      ) {
 
-        giftImages.forEach((img) => {
-          img.classList.remove("show");
-        });
+        giftImages.forEach(
+          (img) => {
+
+            img.classList.remove(
+              "show"
+            );
+
+          }
+        );
 
       }
 
@@ -746,6 +881,7 @@ const supabaseClient =
         .classList.add("show");
 
     }
+
 
 
     /* =====================================================
@@ -758,7 +894,8 @@ const supabaseClient =
         messageInput.value.trim();
 
 
-      submitError.textContent = "";
+      submitError.textContent =
+        "";
 
 
       if (!message) {
@@ -771,31 +908,44 @@ const supabaseClient =
       }
 
 
-      submitMessageButton.disabled = true;
+      submitMessageButton.disabled =
+        true;
+
 
       submitMessageButton.textContent =
         "제출 중...";
 
 
-      const { error } =
-        await supabasClient
+      const result =
+        await supabaseClient
           .from("messages")
           .insert({
             message: message
           });
 
 
+      const error =
+        result.error;
+
+
       if (error) {
 
-        console.error(error);
+        console.error(
+          "INSERT ERROR:",
+          error
+        );
 
         submitError.textContent =
           "제출에 실패했습니다. 잠시 후 다시 시도해주세요.";
 
-        submitMessageButton.disabled = false;
+
+        submitMessageButton.disabled =
+          false;
+
 
         submitMessageButton.textContent =
           "제출하기";
+
 
         return;
 
@@ -808,36 +958,43 @@ const supabaseClient =
 
       messageInput.value = "";
 
-      submitModal.classList.remove("show");
+
+      submitModal.classList.remove(
+        "show"
+      );
 
 
       /*
-        실제 DB의 전체 개수를 다시 가져옵니다.
+        실제 DB에서
+        전체 개수를 다시 가져옵니다.
       */
 
       await loadCount();
 
 
       /*
-        방금 추가된 선물을 보여줍니다.
+        방금 들어온 선물 표시
       */
 
       showNewGift();
 
 
       /*
-        백호가 3초간 웃습니다.
+        백호 웃기
       */
 
       makeBaekhoSmile();
 
 
-      submitMessageButton.disabled = false;
+      submitMessageButton.disabled =
+        false;
+
 
       submitMessageButton.textContent =
         "제출하기";
 
     }
+
 
 
     /* =====================================================
@@ -850,18 +1007,34 @@ const supabaseClient =
         '<div class="loading">압수물 목록을 불러오는 중...</div>';
 
 
-      const { data, error } =
-        await supabasClient
+      const result =
+        await supabaseClient
           .from("messages")
-          .select("id, message, created_at")
-          .order("created_at", {
-            ascending: true
-          });
+          .select(
+            "id, message, created_at"
+          )
+          .order(
+            "created_at",
+            {
+              ascending: true
+            }
+          );
+
+
+      const data =
+        result.data;
+
+      const error =
+        result.error;
 
 
       if (error) {
 
-        console.error(error);
+        console.error(
+          "SELECT ERROR:",
+          error
+        );
+
 
         messageList.innerHTML =
           '<div class="empty">압수물 목록을 불러오지 못했습니다.</div>';
@@ -871,7 +1044,10 @@ const supabaseClient =
       }
 
 
-      if (!data || data.length === 0) {
+      if (
+        !data ||
+        data.length === 0
+      ) {
 
         messageList.innerHTML =
           '<div class="empty">아직 제출된 압수물이 없습니다.</div>';
@@ -881,72 +1057,103 @@ const supabaseClient =
       }
 
 
-      messageList.innerHTML = "";
+      messageList.innerHTML =
+        "";
 
 
-      data.forEach((item, index) => {
+      data.forEach(
+        (item, index) => {
 
-        const messageItem =
-          document.createElement("div");
+          const messageItem =
+            document.createElement(
+              "div"
+            );
 
-        messageItem.className =
-          "message-item";
-
-
-        const number =
-          document.createElement("div");
-
-        number.className =
-          "message-number";
-
-        number.textContent =
-          "NO." +
-          String(index + 1).padStart(3, "0");
+          messageItem.className =
+            "message-item";
 
 
-        const text =
-          document.createElement("div");
+          const number =
+            document.createElement(
+              "div"
+            );
 
-        text.className =
-          "message-text";
-
-        /*
-          textContent를 사용해서
-          HTML 태그가 실행되지 않도록 합니다.
-        */
-
-        text.textContent =
-          item.message;
+          number.className =
+            "message-number";
 
 
-        messageItem.appendChild(number);
-        messageItem.appendChild(text);
+          number.textContent =
+            "NO." +
+            String(index + 1)
+              .padStart(3, "0");
 
-        messageList.appendChild(messageItem);
 
-      });
+          const text =
+            document.createElement(
+              "div"
+            );
+
+          text.className =
+            "message-text";
+
+
+          /*
+            textContent를 사용해서
+            HTML 코드가 실행되지 않게 합니다.
+          */
+
+          text.textContent =
+            item.message;
+
+
+          messageItem.appendChild(
+            number
+          );
+
+          messageItem.appendChild(
+            text
+          );
+
+
+          messageList.appendChild(
+            messageItem
+          );
+
+        }
+      );
 
     }
 
 
+
     /* =====================================================
-       제출창 열기
+       생일선물 제출 버튼
        ===================================================== */
 
-    button.addEventListener(
+    giftButton.addEventListener(
       "click",
       () => {
 
-        submitError.textContent = "";
+        submitError.textContent =
+          "";
 
-        submitModal.classList.add("show");
+        submitModal.classList.add(
+          "show"
+        );
 
-        setTimeout(() => {
-          messageInput.focus();
-        }, 100);
+
+        setTimeout(
+          () => {
+
+            messageInput.focus();
+
+          },
+          100
+        );
 
       }
     );
+
 
 
     /* =====================================================
@@ -957,10 +1164,13 @@ const supabaseClient =
       "click",
       () => {
 
-        submitModal.classList.remove("show");
+        submitModal.classList.remove(
+          "show"
+        );
 
       }
     );
+
 
 
     /* =====================================================
@@ -971,7 +1181,10 @@ const supabaseClient =
       "click",
       async () => {
 
-        viewModal.classList.add("show");
+        viewModal.classList.add(
+          "show"
+        );
+
 
         await loadMessages();
 
@@ -979,22 +1192,26 @@ const supabaseClient =
     );
 
 
+
     /* =====================================================
-       목록 닫기
+       압수물 목록 닫기
        ===================================================== */
 
     closeViewButton.addEventListener(
       "click",
       () => {
 
-        viewModal.classList.remove("show");
+        viewModal.classList.remove(
+          "show"
+        );
 
       }
     );
 
 
+
     /* =====================================================
-       제출
+       제출하기
        ===================================================== */
 
     submitMessageButton.addEventListener(
@@ -1003,8 +1220,9 @@ const supabaseClient =
     );
 
 
+
     /* =====================================================
-       Ctrl/Enter 또는 Cmd/Enter로 제출
+       Cmd + Enter로 제출
        ===================================================== */
 
     messageInput.addEventListener(
@@ -1012,7 +1230,8 @@ const supabaseClient =
       (event) => {
 
         if (
-          (event.ctrlKey || event.metaKey) &&
+          (event.ctrlKey ||
+            event.metaKey) &&
           event.key === "Enter"
         ) {
 
@@ -1024,17 +1243,23 @@ const supabaseClient =
     );
 
 
+
     /* =====================================================
-       바깥쪽 클릭으로 모달 닫기
+       모달 바깥쪽을 눌러 닫기
        ===================================================== */
 
     submitModal.addEventListener(
       "click",
       (event) => {
 
-        if (event.target === submitModal) {
+        if (
+          event.target ===
+          submitModal
+        ) {
 
-          submitModal.classList.remove("show");
+          submitModal.classList.remove(
+            "show"
+          );
 
         }
 
@@ -1046,9 +1271,14 @@ const supabaseClient =
       "click",
       (event) => {
 
-        if (event.target === viewModal) {
+        if (
+          event.target ===
+          viewModal
+        ) {
 
-          viewModal.classList.remove("show");
+          viewModal.classList.remove(
+            "show"
+          );
 
         }
 
@@ -1056,8 +1286,9 @@ const supabaseClient =
     );
 
 
+
     /* =====================================================
-       처음 사이트를 열었을 때
+       사이트 처음 열었을 때
        ===================================================== */
 
     loadCount();
