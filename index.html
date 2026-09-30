@@ -520,7 +520,10 @@
         src="baekho_work.png"
         alt="업무 중인 백호"
       >
-
+<div
+  id="speechBubble"
+  class="speech-bubble">
+</div>
       <div
         class="gift-area"
         id="giftArea">
@@ -953,39 +956,59 @@
 
 
 
-    /* =====================================================
-       백호 웃기
-       ===================================================== */
+/* =====================================================
+   백호 웃기
+   ===================================================== */
 
-    function makeBaekhoSmile() {
+function makeBaekhoSmile() {
 
-      baekho.src =
-        "baekho_smile_empty.png";
+  baekho.src =
+    "baekho_smile_empty.png";
 
-      baekho.alt =
-        "웃는 백호";
-
-
-      clearTimeout(
-        smileTimer
-      );
+  baekho.alt =
+    "웃는 백호";
 
 
-      smileTimer =
-        setTimeout(
-          () => {
+  const randomIndex =
+    Math.floor(
+      Math.random() *
+      speechMessages.length
+    );
 
-            baekho.src =
-              "baekho_work.png";
+  const randomMessage =
+    speechMessages[randomIndex];
 
-            baekho.alt =
-              "업무 중인 백호";
 
-          },
-          3000
-        );
+  speechBubble.innerHTML =
+    randomMessage;
 
-    }
+  speechBubble.style.display =
+    "block";
+
+
+  clearTimeout(
+    smileTimer
+  );
+
+
+  smileTimer =
+    setTimeout(
+      () => {
+
+        baekho.src =
+          "baekho_work.png";
+
+        baekho.alt =
+          "업무 중인 백호";
+
+        speechBubble.style.display =
+          "none";
+
+      },
+      3000
+    );
+
+}
 
 
 
