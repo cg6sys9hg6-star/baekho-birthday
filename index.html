@@ -426,6 +426,63 @@
       .modal-box {
         padding: 18px;
       }
+      /* 모바일 압수물 관리대장 */
+      .archive-table {
+        min-width: 0;
+        width: 100%;
+        font-size: 11px;
+      }
+
+      .archive-table th {
+        padding: 7px 3px;
+        font-size: 11px;
+        white-space: normal;
+        line-height: 1.3;
+      }
+
+      .archive-table td {
+        padding: 8px 4px;
+        overflow-wrap: break-word;
+      }
+
+      .archive-table .number-cell {
+        width: 62px;
+        font-size: 10px;
+      }
+
+      .archive-table .date-cell {
+        width: 82px;
+        font-size: 9px;
+        line-height: 1.5;
+        white-space: normal;
+      }
+
+      .archive-table .type-cell {
+        width: 65px;
+        font-size: 10px;
+        line-height: 1.4;
+        white-space: normal;
+      }
+
+      .archive-table .status-cell {
+        width: 58px;
+        font-size: 9px;
+      }
+
+      .archive-table .message-cell {
+        width: auto;
+        font-size: 11px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+
+      .archive-status {
+        padding: 3px 4px;
+        font-size: 9px;
+      }
+    
     }
   </style>
 </head>
@@ -1271,9 +1328,8 @@ const minutes =
   String(date.getMinutes())
     .padStart(2, "0");
 
-dateCell.textContent =
-  `${year}.${month}.${day} ${hours}:${minutes}`;
-
+dateCell.innerHTML =
+  `${year}.${month}.${day}<br>${hours}:${minutes}`;
 
       /*
         압수물 종류
@@ -1285,8 +1341,8 @@ dateCell.textContent =
       typeCell.className =
         "type-cell";
 
-      typeCell.textContent =
-        "생일축하 메시지";
+      typeCell.innerHTML =
+  "생일축하<br>메시지";
 
 
       /*
