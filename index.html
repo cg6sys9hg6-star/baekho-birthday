@@ -243,29 +243,112 @@
     }
 
     /* 압수물 목록 */
-    .message-list {
-      margin-top: 10px;
-    }
+/* =====================================================
+   압수물 관리대장
+   ===================================================== */
 
-    .message-item {
-      border-top: 1px solid #aaa;
-      padding: 16px 4px;
-    }
+.message-list {
+  margin-top: 10px;
+  border: 1px solid #777;
+  background: #efeee9;
+  overflow-x: auto;
+}
 
-    .message-number {
-      font-size: 12px;
-      letter-spacing: 1px;
-      color: #777;
-      margin-bottom: 7px;
-    }
+.archive-header {
+  background: #d8d5cc;
+  border-bottom: 2px solid #555;
+  padding: 12px;
+  text-align: left;
+}
 
-    .message-text {
-      font-family: Arial, sans-serif;
-      font-size: 15px;
-      line-height: 1.6;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
+.archive-title {
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.archive-case {
+  margin-top: 5px;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  color: #666;
+  letter-spacing: 1px;
+}
+
+.archive-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+}
+
+.archive-table th {
+  background: #d1cec5;
+  border: 1px solid #999;
+  padding: 8px 6px;
+  text-align: center;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.archive-table td {
+  border: 1px solid #aaa;
+  padding: 8px 7px;
+  background: #f7f6f1;
+  vertical-align: top;
+}
+
+.archive-table .number-cell {
+  width: 75px;
+  text-align: center;
+  font-family: "Courier New", monospace;
+  white-space: nowrap;
+}
+
+.archive-table .date-cell {
+  width: 145px;
+  text-align: center;
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+.archive-table .type-cell {
+  width: 115px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.archive-table .status-cell {
+  width: 75px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.archive-table .message-cell {
+  width: auto;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.archive-status {
+  display: inline-block;
+  padding: 3px 6px;
+  border: 1px solid #777;
+  background: #e5e3dc;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.archive-empty {
+  padding: 35px 15px;
+  text-align: center;
+  color: #777;
+  font-family: Arial, sans-serif;
+}
 
     .loading {
       text-align: center;
@@ -472,20 +555,28 @@
 
     <div class="modal-box">
 
-      <h2 class="modal-title">
-        📦 압수물 보관 목록
-      </h2>
+      <div class="archive-header">
 
-      <div
-        id="messageList"
-        class="message-list">
+  <div class="archive-title">
+    특별보관 압수물 관리대장
+  </div>
 
-        <div class="loading">
-          압수물 목록을 불러오는 중...
-        </div>
+  <div class="archive-case">
+    CASE NO. BH-2026-BIRTHDAY
+  </div>
 
-      </div>
+</div>
 
+
+<div
+  id="messageList"
+  class="message-list">
+
+  <div class="loading">
+    압수물 목록을 불러오는 중...
+  </div>
+
+</div>
       <div class="modal-buttons">
 
         <button
@@ -1003,126 +1094,281 @@
 
     async function loadMessages() {
 
-      messageList.innerHTML =
-        '<div class="loading">압수물 목록을 불러오는 중...</div>';
+  messageList.innerHTML =
+    '<div class="loading">압수물 목록을 불러오는 중...</div>';
 
 
-      const result =
-        await supabaseClient
-          .from("messages")
-          .select(
-            "id, message, created_at"
-          )
-          .order(
-            "created_at",
-            {
-              ascending: true
-            }
-          );
-
-
-      const data =
-        result.data;
-
-      const error =
-        result.error;
-
-
-      if (error) {
-
-        console.error(
-          "SELECT ERROR:",
-          error
-        );
-
-
-        messageList.innerHTML =
-          '<div class="empty">압수물 목록을 불러오지 못했습니다.</div>';
-
-        return;
-
-      }
-
-
-      if (
-        !data ||
-        data.length === 0
-      ) {
-
-        messageList.innerHTML =
-          '<div class="empty">아직 제출된 압수물이 없습니다.</div>';
-
-        return;
-
-      }
-
-
-      messageList.innerHTML =
-        "";
-
-
-      data.forEach(
-        (item, index) => {
-
-          const messageItem =
-            document.createElement(
-              "div"
-            );
-
-          messageItem.className =
-            "message-item";
-
-
-          const number =
-            document.createElement(
-              "div"
-            );
-
-          number.className =
-            "message-number";
-
-
-          number.textContent =
-            "NO." +
-            String(index + 1)
-              .padStart(3, "0");
-
-
-          const text =
-            document.createElement(
-              "div"
-            );
-
-          text.className =
-            "message-text";
-
-
-          /*
-            textContent를 사용해서
-            HTML 코드가 실행되지 않게 합니다.
-          */
-
-          text.textContent =
-            item.message;
-
-
-          messageItem.appendChild(
-            number
-          );
-
-          messageItem.appendChild(
-            text
-          );
-
-
-          messageList.appendChild(
-            messageItem
-          );
-
+  const result =
+    await supabaseClient
+      .from("messages")
+      .select(
+        "id, message, created_at"
+      )
+      .order(
+        "created_at",
+        {
+          ascending: true
         }
       );
 
+
+  const data =
+    result.data;
+
+  const error =
+    result.error;
+
+
+  if (error) {
+
+    console.error(
+      "SELECT ERROR:",
+      error
+    );
+
+    messageList.innerHTML =
+      '<div class="archive-empty">압수물 목록을 불러오지 못했습니다.</div>';
+
+    return;
+
+  }
+
+
+  if (
+    !data ||
+    data.length === 0
+  ) {
+
+    messageList.innerHTML =
+      '<div class="archive-empty">아직 제출된 압수물이 없습니다.</div>';
+
+    return;
+
+  }
+
+
+  /*
+    엑셀식 관리대장 만들기
+  */
+
+  const table =
+    document.createElement("table");
+
+  table.className =
+    "archive-table";
+
+
+  /*
+    표 머리글
+  */
+
+  const thead =
+    document.createElement("thead");
+
+
+  const headerRow =
+    document.createElement("tr");
+
+
+  const headers = [
+    "관리번호",
+    "접수일시",
+    "압수물 종류",
+    "압수물 내용",
+    "처리상태"
+  ];
+
+
+  headers.forEach(
+    (headerText) => {
+
+      const th =
+        document.createElement("th");
+
+      th.textContent =
+        headerText;
+
+      headerRow.appendChild(th);
+
     }
+  );
+
+
+  thead.appendChild(
+    headerRow
+  );
+
+
+  table.appendChild(
+    thead
+  );
+
+
+  /*
+    표 내용
+  */
+
+  const tbody =
+    document.createElement("tbody");
+
+
+  data.forEach(
+    (item, index) => {
+
+      const row =
+        document.createElement("tr");
+
+
+      /*
+        관리번호
+      */
+
+      const numberCell =
+        document.createElement("td");
+
+      numberCell.className =
+        "number-cell";
+
+      numberCell.textContent =
+        "BH-" +
+        String(index + 1)
+          .padStart(3, "0");
+
+
+      /*
+        접수일시
+      */
+
+      const dateCell =
+        document.createElement("td");
+
+      dateCell.className =
+        "date-cell";
+
+
+      const date =
+        new Date(
+          item.created_at
+        );
+
+
+      dateCell.textContent =
+        date.toLocaleString(
+          "ko-KR",
+          {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit"
+          }
+        );
+
+
+      /*
+        압수물 종류
+      */
+
+      const typeCell =
+        document.createElement("td");
+
+      typeCell.className =
+        "type-cell";
+
+      typeCell.textContent =
+        "생일축하 메시지";
+
+
+      /*
+        메시지 내용
+      */
+
+      const messageCell =
+        document.createElement("td");
+
+      messageCell.className =
+        "message-cell";
+
+      messageCell.textContent =
+        item.message;
+
+
+      /*
+        처리상태
+      */
+
+      const statusCell =
+        document.createElement("td");
+
+      statusCell.className =
+        "status-cell";
+
+
+      const status =
+        document.createElement("span");
+
+      status.className =
+        "archive-status";
+
+      status.textContent =
+        "보관중";
+
+
+      statusCell.appendChild(
+        status
+      );
+
+
+      /*
+        한 줄 완성
+      */
+
+      row.appendChild(
+        numberCell
+      );
+
+      row.appendChild(
+        dateCell
+      );
+
+      row.appendChild(
+        typeCell
+      );
+
+      row.appendChild(
+        messageCell
+      );
+
+      row.appendChild(
+        statusCell
+      );
+
+
+      tbody.appendChild(
+        row
+      );
+
+    }
+  );
+
+
+  table.appendChild(
+    tbody
+  );
+
+
+  /*
+    기존 내용 제거 후
+    완성된 표 삽입
+  */
+
+  messageList.innerHTML = "";
+
+  messageList.appendChild(
+    table
+  );
+
+}
 
 
 
