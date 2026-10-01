@@ -982,8 +982,13 @@
 
 function makeBaekhoSmile() {
 
-  baekho.src =
-    "baekho_smile_empty.png";
+  if (giftCount >= 45) {
+    baekho.src =
+    "baekho_smile_45.png";
+  } else {
+    baekho.src =
+      "baekho_smile_empty.png";
+  }
 
   baekho.alt =
     "웃는 백호";
@@ -1015,8 +1020,13 @@ function makeBaekhoSmile() {
     setTimeout(
       () => {
 
+        if (giftCount >= 45) {
         baekho.src =
-          "baekho_work.png";
+          "baekho_work_45.png";
+        } else {
+          baekho.src =
+            "baekho_work.png";
+        }
 
         baekho.alt =
           "업무 중인 백호";
