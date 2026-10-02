@@ -967,6 +967,16 @@
       giftCount =
         count || 0;
 
+if (giftCount >= 75) {
+  baekho.src =
+    "baekho_work_75.png";
+} else if (giftCount >= 45) {
+  baekho.src =
+    "baekho_work_45.png";
+} else {
+  baekho.src =
+    "baekho_work.png";
+}
 
       updateCount();
 
@@ -982,13 +992,16 @@
 
 function makeBaekhoSmile() {
 
-  if (giftCount >= 45) {
-    baekho.src =
+  if (giftCount >= 75) {
+  baekho.src =
+    "baekho_smile_75.png";
+} else if (giftCount >= 45) {
+  baekho.src =
     "baekho_smile_45.png";
-  } else {
-    baekho.src =
-      "baekho_smile_empty.png";
-  }
+} else {
+  baekho.src =
+    "baekho_smile_empty.png";
+}
 
   baekho.alt =
     "웃는 백호";
@@ -1020,13 +1033,16 @@ function makeBaekhoSmile() {
     setTimeout(
       () => {
 
-        if (giftCount >= 45) {
-        baekho.src =
-          "baekho_work_45.png";
-        } else {
-          baekho.src =
-            "baekho_work.png";
-        }
+        if (giftCount >= 75) {
+  baekho.src =
+    "baekho_work_75.png";
+} else if (giftCount >= 45) {
+  baekho.src =
+    "baekho_work_45.png";
+} else {
+  baekho.src =
+    "baekho_work.png";
+}
 
         baekho.alt =
           "업무 중인 백호";
@@ -1661,6 +1677,16 @@ dateCell.innerHTML =
        ===================================================== */
 
     loadCount();
+    if (giftCount >= 75) {
+  baekho.src =
+    "baekho_work_75.png";
+} else if (giftCount >= 45) {
+  baekho.src =
+    "baekho_work_45.png";
+} else {
+  baekho.src =
+    "baekho_work.png";
+}
 const speechMessages = [
   "감사합니다.",
   "고맙습니다.",
