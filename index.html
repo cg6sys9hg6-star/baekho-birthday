@@ -967,32 +967,10 @@
       giftCount =
         count || 0;
 
-if (giftCount >= 75) {
+if (giftCount >= 100) {
   baekho.src =
-    "baekho_work_75.png";
-} else if (giftCount >= 45) {
-  baekho.src =
-    "baekho_work_45.png";
-} else {
-  baekho.src =
-    "baekho_work.png";
-}
-
-      updateCount();
-
-      showGiftState();
-
-    }
-
-
-
-/* =====================================================
-   백호 웃기
-   ===================================================== */
-
-function makeBaekhoSmile() {
-
-  if (giftCount >= 75) {
+    "baekho_smile_100.png";
+} else if (giftCount >= 75) {
   baekho.src =
     "baekho_smile_75.png";
 } else if (giftCount >= 45) {
@@ -1002,6 +980,33 @@ function makeBaekhoSmile() {
   baekho.src =
     "baekho_smile_empty.png";
 }
+
+      updateCount();
+
+      showGiftState();
+
+    }
+
+
+/* =====================================================
+   백호 웃기
+   ===================================================== */
+
+function makeBaekhoSmile() {
+
+  if (giftCount >= 100) {
+    baekho.src =
+      "baekho_smile_100.png";
+  } else if (giftCount >= 75) {
+    baekho.src =
+      "baekho_smile_75.png";
+  } else if (giftCount >= 45) {
+    baekho.src =
+      "baekho_smile_45.png";
+  } else {
+    baekho.src =
+      "baekho_smile_empty.png";
+  }
 
   baekho.alt =
     "웃는 백호";
@@ -1033,16 +1038,19 @@ function makeBaekhoSmile() {
     setTimeout(
       () => {
 
-        if (giftCount >= 75) {
-  baekho.src =
-    "baekho_work_75.png";
-} else if (giftCount >= 45) {
-  baekho.src =
-    "baekho_work_45.png";
-} else {
-  baekho.src =
-    "baekho_work.png";
-}
+        if (giftCount >= 100) {
+          baekho.src =
+            "baekho_sleep_100.png";
+        } else if (giftCount >= 75) {
+          baekho.src =
+            "baekho_work_75.png";
+        } else if (giftCount >= 45) {
+          baekho.src =
+            "baekho_work_45.png";
+        } else {
+          baekho.src =
+            "baekho_work.png";
+        }
 
         baekho.alt =
           "업무 중인 백호";
@@ -1055,7 +1063,6 @@ function makeBaekhoSmile() {
     );
 
 }
-
 
 
     /* =====================================================
@@ -1677,7 +1684,10 @@ dateCell.innerHTML =
        ===================================================== */
 
     loadCount();
-    if (giftCount >= 75) {
+    if (giftCount >= 100) {
+  baekho.src =
+    "baekho_sleep_100.png";
+} else if (giftCount >= 75) {
   baekho.src =
     "baekho_work_75.png";
 } else if (giftCount >= 45) {
