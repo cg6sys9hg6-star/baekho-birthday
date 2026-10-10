@@ -2,14 +2,17 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>백호 생일선물 압수물 보관소</title>
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
+    /* ================================================
+       기본 설정
+       ================================================ */
 
     * {
       box-sizing: border-box;
@@ -29,10 +32,15 @@
       text-align: center;
     }
 
+
+    /* ================================================
+       상단 제목
+       ================================================ */
+
     .official {
+      margin-bottom: 12px;
       font-size: 13px;
       letter-spacing: 2px;
-      margin-bottom: 12px;
     }
 
     h1 {
@@ -40,35 +48,40 @@
       font-family: "궁서", "Gungsuh", "Batang", serif;
       font-size: clamp(28px, 6vw, 56px);
       letter-spacing: 2px;
+      line-height: 1.4;
     }
 
     .subtitle {
       margin: 12px 0 30px;
       font-size: 14px;
+      line-height: 1.7;
       color: #666;
     }
 
     .notice {
       display: inline-block;
-      border: 1px solid #888;
-      padding: 8px 18px;
+      max-width: 100%;
       margin-bottom: 25px;
-      font-size: 13px;
+      padding: 12px 18px;
+      border: 1px solid #888;
       background: #f7f5ef;
+      font-size: 13px;
+      line-height: 1.6;
     }
 
 
-    /* =====================================================
+    /* ================================================
        백호 장면
-       ===================================================== */
+       GIF와 안내문을 겹쳐 표시
+       ================================================ */
 
     .scene {
       position: relative;
       width: 100%;
       aspect-ratio: 4 / 3;
+      overflow: hidden;
       background: #d8d0c1;
       border: 3px solid #383838;
-      overflow: hidden;
     }
 
     .scene::before {
@@ -76,323 +89,143 @@
       position: absolute;
       top: 18px;
       left: 20px;
+      z-index: 3;
+      color: #777;
       font-size: 11px;
       letter-spacing: 2px;
-      color: #777;
-      z-index: 100;
+      pointer-events: none;
     }
 
-
-    /* =====================================================
-       백호 이미지
-       ===================================================== */
+    /* 백호 애니메이션 */
 
     .baekho-image {
       position: absolute;
       inset: 0;
+      z-index: 1;
+      display: block;
       width: 100%;
       height: 100%;
       object-fit: fill;
-      z-index: 1;
     }
-/* =====================================================
-   안내문 및 말풍선 이미지
-   ===================================================== */
 
-.notice-overlay {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  z-index: 2;
-  mix-blend-mode: multiply;
-  pointer-events: none;
-}
+    /* 안내문 및 말풍선 */
 
-    /* =====================================================
-       숫자
-       ===================================================== */
+    .notice-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+
+      /* 흰 배경은 투명하게 보이고,
+         검은 선과 글자는 위에 남도록 처리 */
+
+      mix-blend-mode: multiply;
+
+      pointer-events: none;
+    }
+
+
+    /* ================================================
+       압수물 개수
+       ================================================ */
 
     .count {
       margin-top: 30px;
       font-size: 18px;
+      line-height: 1.7;
     }
 
     .count strong {
       display: block;
-      font-size: 48px;
       margin-top: 5px;
-      letter-spacing: 3px;
+      font-size: clamp(44px, 10vw, 64px);
+      line-height: 1.3;
+      letter-spacing: 5px;
+      font-weight: bold;
     }
 
 
-    /* =====================================================
-       버튼
-       ===================================================== */
+    /* ================================================
+       사건 종결 안내문
+       ================================================ */
 
-    button {
-      margin-top: 20px;
-      padding: 14px 28px;
-      border: 2px solid #333;
-      background: #333;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #555;
-    }
-
-    .view-button {
-      margin-left: 8px;
-      background: #f7f5ef;
-      color: #333;
-    }
-
-    .view-button:hover {
-      background: #ddd8cd;
-    }
-/* 사건 종결 안내문 */
-
-.closed-notice {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 28px 16px;
-  margin: 20px 0;
-  background: #333333;
-  color: #ffffff;
-  border: 3px solid #333333;
-  text-align: center;
-  font-size: 24px;
-  font-weight: normal;
-  letter-spacing: 1px;
-}
-
-    /* =====================================================
-       모달
-       ===================================================== */
-
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.55);
-      z-index: 1000;
-      padding: 20px;
-      overflow-y: auto;
-    }
-
-    .modal.show {
+    .closed-notice {
       display: flex;
       align-items: center;
       justify-content: center;
-    }
 
-    .modal-box {
-      width: min(600px, 100%);
-      max-height: 85vh;
-      overflow-y: auto;
-      background: #f7f5ef;
+      width: 100%;
+      min-height: 120px;
+
+      margin-top: 25px;
+      padding: 24px 16px;
+
+      background: #333;
       border: 3px solid #333;
-      padding: 25px;
-      text-align: left;
-    }
+      color: #fff;
 
-    .modal-title {
-      margin: 0 0 18px;
-      font-size: 24px;
-      text-align: center;
-    }
-
-
-    /* =====================================================
-       메시지 입력
-       ===================================================== */
-
-    .message-input {
-      width: 100%;
-      min-height: 150px;
-      padding: 14px;
-      border: 1px solid #777;
-      background: white;
-      font-family: inherit;
-      font-size: 16px;
-      resize: vertical;
-    }
-
-    .message-input:focus {
-      outline: 2px solid #555;
-    }
-
-    .modal-buttons {
-      text-align: center;
-      margin-top: 15px;
-    }
-
-    .modal-buttons button {
-      margin-top: 0;
-    }
-
-    .close-button {
-      background: #777;
-    }
-
-
-    /* =====================================================
-       압수물 관리대장
-       ===================================================== */
-
-    .message-list {
-      margin-top: 10px;
-      border: 1px solid #777;
-      background: #efeee9;
-      overflow-x: auto;
-    }
-
-    .archive-header {
-      background: #d8d5cc;
-      border-bottom: 2px solid #555;
-      padding: 12px;
-      text-align: left;
-    }
-
-    .archive-title {
-      font-family: Arial, sans-serif;
-      font-size: 18px;
-      font-weight: bold;
+      font-size: clamp(20px, 4.5vw, 30px);
+      font-weight: normal;
       letter-spacing: 1px;
-    }
-
-    .archive-case {
-      margin-top: 5px;
-      font-family: Arial, sans-serif;
-      font-size: 11px;
-      color: #666;
-      letter-spacing: 1px;
-    }
-
-    .archive-table {
-      width: 100%;
-      min-width: 0;
-      border-collapse: collapse;
-      table-layout: fixed;
-      font-family: Arial, sans-serif;
-      font-size: 13px;
-    }
-
-    .archive-table th {
-      background: #d1cec5;
-      border: 1px solid #999;
-      padding: 8px 6px;
-      text-align: center;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-
-    .archive-table td {
-      border: 1px solid #aaa;
-      padding: 8px 7px;
-      background: #f7f6f1;
-      vertical-align: top;
-    }
-
-    .archive-table .number-cell {
-      width: 62px;
-      text-align: center;
-      font-family: "Courier New", monospace;
-      white-space: nowrap;
-    }
-
-    .archive-table .date-cell {
-      width: 125px;
-      text-align: center;
-      white-space: nowrap;
-      font-size: 11px;
-    }
-
-    .archive-table .type-cell {
-      width: 105px;
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    .archive-table .status-cell {
-      width: 65px;
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    .archive-table .message-cell {
-      width: auto;
       line-height: 1.5;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .archive-status {
-      display: inline-block;
-      padding: 3px 6px;
-      border: 1px solid #777;
-      background: #e5e3dc;
-      font-size: 10px;
-      letter-spacing: 1px;
-    }
-
-    .archive-empty {
-      padding: 35px 15px;
-      text-align: center;
-      color: #777;
-      font-family: Arial, sans-serif;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 30px 0;
-      color: #777;
-    }
-
-    .error-message {
-      margin-top: 12px;
-      color: #8b0000;
-      font-size: 13px;
-      text-align: center;
     }
 
 
-    /* =====================================================
-       푸터
-       ===================================================== */
+    /* ================================================
+       하단 사건 기록
+       ================================================ */
 
     .footer {
-      margin-top: 50px;
-      font-size: 12px;
+      margin-top: 45px;
       color: #777;
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    .footer .case-number {
+      margin-bottom: 10px;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    .footer .archive-status {
+      margin-top: 20px;
+      color: #444;
+      font-size: 11px;
+      letter-spacing: 2px;
     }
 
 
-    /* =====================================================
+    /* ================================================
        모바일
-       ===================================================== */
+       ================================================ */
 
     @media (max-width: 600px) {
 
       .container {
         width: 96%;
         padding-top: 20px;
+        padding-bottom: 40px;
       }
 
       .official {
         font-size: 10px;
+        letter-spacing: 1px;
       }
 
       .subtitle {
+        margin-bottom: 20px;
         font-size: 12px;
       }
 
       .notice {
-        font-size: 11px;
+        margin-bottom: 20px;
+        padding: 10px 12px;
+        font-size: 12px;
       }
 
       .scene::before {
@@ -402,90 +235,19 @@
       }
 
       .count {
+        margin-top: 25px;
         font-size: 15px;
       }
 
-      .count strong {
-        font-size: 40px;
+      .closed-notice {
+        min-height: 100px;
+        margin-top: 20px;
       }
 
-      button {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 10px;
-      }
-
-      .view-button {
-        margin-left: 0;
-      }
-
-      .modal {
-        padding: 10px;
-      }
-
-      .modal-box {
-        padding: 18px;
-      }
-
-
-      /* 모바일 압수물 관리대장 */
-
-      .archive-table {
-        min-width: 0;
-        width: 100%;
+      .footer {
+        margin-top: 35px;
         font-size: 11px;
       }
-
-      .archive-table th {
-        padding: 7px 3px;
-        font-size: 11px;
-        white-space: normal;
-        line-height: 1.3;
-      }
-
-      .archive-table td {
-        padding: 8px 4px;
-        overflow-wrap: break-word;
-      }
-
-      .archive-table .number-cell {
-        width: 62px;
-        font-size: 10px;
-      }
-
-      .archive-table .date-cell {
-        width: 82px;
-        font-size: 9px;
-        line-height: 1.5;
-        white-space: normal;
-      }
-
-      .archive-table .type-cell {
-        width: 65px;
-        font-size: 10px;
-        line-height: 1.4;
-        white-space: normal;
-      }
-
-      .archive-table .status-cell {
-        width: 58px;
-        font-size: 9px;
-      }
-
-      .archive-table .message-cell {
-        width: auto;
-        font-size: 11px;
-        line-height: 1.5;
-        white-space: pre-wrap;
-        word-break: break-word;
-        overflow-wrap: anywhere;
-      }
-
-      .archive-status {
-        padding: 3px 4px;
-        font-size: 9px;
-      }
-
     }
 
   </style>
@@ -495,6 +257,10 @@
 <body>
 
   <main class="container">
+
+    <!-- ============================================
+         상단 제목
+         ============================================ -->
 
     <div class="official">
       대한민국 검찰청 · 특별보관 제2026-BH호
@@ -514,886 +280,73 @@
     </div>
 
 
-    <!-- =====================================================
-         백호
-         ===================================================== -->
+    <!-- ============================================
+         백호 GIF 및 안내문
+         ============================================ -->
 
-   
-<section class="scene">
-  <img
-    id="baekho"
-    class="baekho-image"
-    src="baekho_ani.gif"
-    alt="백호 검사실 정리 중"
-  >
+    <section class="scene">
 
-  <img
-    class="notice-overlay"
-    src="baekho_notice.png"
-    alt="압수물 과다 접수로 업무 지연 중"
-  >
-</section>
+      <img
+        class="baekho-image"
+        src="baekho_ani.gif"
+        alt="백호 검사실 정리 중"
+      >
+
+      <img
+        class="notice-overlay"
+        src="baekho_notice.png"
+        alt="압수물 과다 접수로 업무 지연 중"
+      >
+
+    </section>
 
 
-
-    <!-- =====================================================
-         숫자
-         ===================================================== -->
+    <!-- ============================================
+         압수물 개수
+         ============================================ -->
 
     <div class="count">
 
       현재 보관 중인 압수물
 
-      <strong id="count">
-        000
-      </strong>
+      <strong>200</strong>
 
     </div>
 
 
-    <!-- =====================================================
-         버튼
-         ===================================================== -->
+    <!-- ============================================
+         사건 종결 안내문
+         ============================================ -->
 
-  <div class="closed-notice">
-  생일 사건 후속 조치 중
-</div>
+    <div class="closed-notice">
+      생일 사건 후속 조치 중
+    </div>
 
-    <!-- =====================================================
-         푸터
-         ===================================================== -->
 
-    <div class="footer">
+    <!-- ============================================
+         하단 사건 기록
+         ============================================ -->
 
-      CASE NO. BH-2026-BIRTHDAY<br>
+    <footer class="footer">
 
-      Baekho Birthday Gift Archive<br><br>
+      <div class="case-number">
+        CASE NO. BH-2026-BIRTHDAY
+      </div>
+
+      Baekho Birthday Gift Archive
+
+      <br><br>
 
       본 사이트는 실제 대한민국 검찰청 및 국가기관과 관련이 없는<br>
       퇴마록 캐릭터 백호의 비공식 팬메이드 생일 이벤트 사이트입니다.
 
-    </div>
+      <div class="archive-status">
+        CASE CLOSED · ARCHIVE PRESERVED
+      </div>
+
+    </footer>
 
   </main>
-
-
-
-  <!-- =====================================================
-       메시지 제출창
-       ===================================================== -->
-
-  <div
-    class="modal"
-    id="submitModal">
-
-    <div class="modal-box">
-
-      <h2 class="modal-title">
-        압수물 제출
-      </h2>
-
-      <textarea
-        id="messageInput"
-        class="message-input"
-        maxlength="1000"
-        placeholder="백호에게 전하고 싶은 말을 남겨주세요."
-      ></textarea>
-
-      <div class="modal-buttons">
-
-        <button id="submitMessageButton">
-          제출하기
-        </button>
-
-        <button
-          id="closeSubmitButton"
-          class="close-button">
-          취소
-        </button>
-
-      </div>
-
-      <div
-        id="submitError"
-        class="error-message">
-      </div>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =====================================================
-       압수물 구경하기
-       ===================================================== -->
-
-  <div
-    class="modal"
-    id="viewModal">
-
-    <div class="modal-box">
-
-      <div class="archive-header">
-
-        <div class="archive-title">
-          특별보관 압수물 관리대장
-        </div>
-
-        <div class="archive-case">
-          CASE NO. BH-2026-BIRTHDAY
-        </div>
-
-      </div>
-
-
-      <div
-        id="messageList"
-        class="message-list">
-
-        <div class="loading">
-          압수물 목록을 불러오는 중...
-        </div>
-
-      </div>
-
-
-      <div class="modal-buttons">
-
-        <button
-          id="closeViewButton"
-          class="close-button">
-          닫기
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-
-  <script>
-
-    /* =====================================================
-       SUPABASE 연결
-       ===================================================== */
-
-    const SUPABASE_URL =
-      "https://avywoxtrzisfyjtsamtv.supabase.co";
-
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_8FPmmGNkaNOSHpRTWJZ6Tw_fzVSgrjP";
-
-    const supabaseClient =
-      supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
-
-
-    /* =====================================================
-       상준 난입 이미지
-       ===================================================== */
-
-    const endImages = [
-
-  "baekho_end_01.png",
-  "baekho_end_02.png",
-  "baekho_end_03.png",
-  "baekho_end_04.png",
-  "baekho_end_05.png",
-  "baekho_end_06.png",
-  "baekho_end_07.png"
-
-];
-
-
-    /* =====================================================
-       화면 요소
-       ===================================================== */
-
-    const countText =
-      document.getElementById("count");
-
-    const giftButton =
-      document.getElementById("giftButton");
-
-    const viewButton =
-      document.getElementById("viewButton");
-
-    const baekho =
-      document.getElementById("baekho");
-
-    const submitModal =
-      document.getElementById("submitModal");
-
-    const viewModal =
-      document.getElementById("viewModal");
-
-    const messageInput =
-      document.getElementById("messageInput");
-
-    const submitMessageButton =
-      document.getElementById(
-        "submitMessageButton"
-      );
-
-    const closeSubmitButton =
-      document.getElementById(
-        "closeSubmitButton"
-      );
-
-    const closeViewButton =
-      document.getElementById(
-        "closeViewButton"
-      );
-
-    const messageList =
-      document.getElementById(
-        "messageList"
-      );
-
-    const submitError =
-      document.getElementById(
-        "submitError"
-      );
-
-
-    /* =====================================================
-       전역 변수
-       ===================================================== */
-
-    let giftCount = 0;
-
-    let endImageTimer;
-
-
-    /* =====================================================
-       숫자 표시
-       ===================================================== */
-
-    function updateCount() {
-
-      countText.textContent =
-        String(giftCount)
-          .padStart(3, "0");
-
-    }
-
-
-    /* =====================================================
-       백호 기본 이미지
-       ===================================================== */
-
-    function setBaekhoShower() {
-  baekho.src = "baekho_ani.gif";
-}
-
-      baekho.alt =
-        "샤워하고 온 백호";
-
-    }
-
-
-    /* =====================================================
-       상준 난입 이미지
-       ===================================================== */
-
-    function showRandomEndImage() {
-
-      const randomIndex =
-        Math.floor(
-          Math.random() *
-          endImages.length
-        );
-
-
-      baekho.src =
-        endImages[randomIndex];
-
-      baekho.alt =
-        "상준이 난입한 백호";
-
-
-      /* 기존 타이머가 있다면 취소 */
-
-      clearTimeout(
-        endImageTimer
-      );
-
-
-      /* 3초 후 샤워 백호로 복귀 */
-
-      endImageTimer =
-        setTimeout(
-          () => {
-
-            setBaekhoShower();
-
-          },
-          3000
-        );
-
-    }
-
-
-    /* =====================================================
-       Supabase에서 전체 개수 가져오기
-       ===================================================== */
-
-    async function loadCount() {
-  giftCount = 200;
-  updateCount();
-}
-
-    /* =====================================================
-       메시지 제출
-       ===================================================== */
-
-    async function submitMessage() {
-
-      const message =
-        messageInput.value.trim();
-
-
-      submitError.textContent =
-        "";
-
-
-      if (!message) {
-
-        submitError.textContent =
-          "메시지를 입력해주세요.";
-
-        return;
-
-      }
-
-
-      submitMessageButton.disabled =
-        true;
-
-      submitMessageButton.textContent =
-        "제출 중...";
-
-
-      const result =
-        await supabaseClient
-          .from("messages")
-          .insert({
-            message: message
-          });
-
-
-      const error =
-        result.error;
-
-
-      if (error) {
-
-        console.error(
-          "INSERT ERROR:",
-          error
-        );
-
-        submitError.textContent =
-          "제출에 실패했습니다. 잠시 후 다시 시도해주세요.";
-
-        submitMessageButton.disabled =
-          false;
-
-        submitMessageButton.textContent =
-          "제출하기";
-
-        return;
-
-      }
-
-
-      /* =================================================
-         제출 성공
-         ================================================= */
-
-
-      messageInput.value = "";
-
-
-      submitModal.classList.remove(
-        "show"
-      );
-
-
-      /*
-        실제 DB에서
-        전체 개수를 다시 가져옵니다.
-      */
-
-      await loadCount();
-
-
-      /*
-        상준 난입!
-      */
-
-      showRandomEndImage();
-
-
-      submitMessageButton.disabled =
-        false;
-
-      submitMessageButton.textContent =
-        "제출하기";
-
-    }
-
-
-    /* =====================================================
-       압수물 전체 불러오기
-       ===================================================== */
-
-    async function loadMessages() {
-
-      messageList.innerHTML =
-        '<div class="loading">압수물 목록을 불러오는 중...</div>';
-
-
-      const result =
-        await supabaseClient
-          .from("messages")
-          .select(
-            "id, message, created_at"
-          )
-          .order(
-            "created_at",
-            {
-              ascending: true
-            }
-          );
-
-
-      const data =
-        result.data;
-
-      const error =
-        result.error;
-
-
-      if (error) {
-
-        console.error(
-          "SELECT ERROR:",
-          error
-        );
-
-        messageList.innerHTML =
-          '<div class="archive-empty">압수물 목록을 불러오지 못했습니다.</div>';
-
-        return;
-
-      }
-
-
-      if (
-        !data ||
-        data.length === 0
-      ) {
-
-        messageList.innerHTML =
-          '<div class="archive-empty">아직 제출된 압수물이 없습니다.</div>';
-
-        return;
-
-      }
-
-
-      /* =================================================
-         표 만들기
-         ================================================= */
-
-      const table =
-        document.createElement("table");
-
-      table.className =
-        "archive-table";
-
-
-      /* 표 머리글 */
-
-      const thead =
-        document.createElement("thead");
-
-      const headerRow =
-        document.createElement("tr");
-
-
-      const headers = [
-        "관리번호",
-        "접수일시",
-        "압수물 종류",
-        "압수물 내용",
-        "처리상태"
-      ];
-
-
-      headers.forEach(
-        (headerText) => {
-
-          const th =
-            document.createElement("th");
-
-          th.textContent =
-            headerText;
-
-          headerRow.appendChild(th);
-
-        }
-      );
-
-
-      thead.appendChild(
-        headerRow
-      );
-
-      table.appendChild(
-        thead
-      );
-
-
-      /* =================================================
-         표 내용
-         ================================================= */
-
-      const tbody =
-        document.createElement("tbody");
-
-
-      data.forEach(
-        (item, index) => {
-
-          const row =
-            document.createElement("tr");
-
-
-          /* 관리번호 */
-
-          const numberCell =
-            document.createElement("td");
-
-          numberCell.className =
-            "number-cell";
-
-          numberCell.textContent =
-            "BH-" +
-            String(index + 1)
-              .padStart(3, "0");
-
-
-          /* 접수일시 */
-
-          const dateCell =
-            document.createElement("td");
-
-          dateCell.className =
-            "date-cell";
-
-
-          const date =
-            new Date(
-              item.created_at
-            );
-
-
-          const year =
-            date.getFullYear();
-
-          const month =
-            String(
-              date.getMonth() + 1
-            ).padStart(2, "0");
-
-          const day =
-            String(
-              date.getDate()
-            ).padStart(2, "0");
-
-          const hours =
-            String(
-              date.getHours()
-            ).padStart(2, "0");
-
-          const minutes =
-            String(
-              date.getMinutes()
-            ).padStart(2, "0");
-
-
-          dateCell.innerHTML =
-            `${year}.${month}.${day}<br>${hours}:${minutes}`;
-
-
-          /* 압수물 종류 */
-
-          const typeCell =
-            document.createElement("td");
-
-          typeCell.className =
-            "type-cell";
-
-          typeCell.innerHTML =
-            "생일축하<br>메시지";
-
-
-          /* 메시지 내용 */
-
-          const messageCell =
-            document.createElement("td");
-
-          messageCell.className =
-            "message-cell";
-
-          messageCell.textContent =
-            item.message;
-
-
-          /* 처리상태 */
-
-          const statusCell =
-            document.createElement("td");
-
-          statusCell.className =
-            "status-cell";
-
-
-          const status =
-            document.createElement("span");
-
-          status.className =
-            "archive-status";
-
-          status.textContent =
-            "보관중";
-
-
-          statusCell.appendChild(
-            status
-          );
-
-
-          /* 한 줄 완성 */
-
-          row.appendChild(
-            numberCell
-          );
-
-          row.appendChild(
-            dateCell
-          );
-
-          row.appendChild(
-            typeCell
-          );
-
-          row.appendChild(
-            messageCell
-          );
-
-          row.appendChild(
-            statusCell
-          );
-
-
-          tbody.appendChild(
-            row
-          );
-
-        }
-      );
-
-
-      table.appendChild(
-        tbody
-      );
-
-
-      /* 완성된 표 삽입 */
-
-      messageList.innerHTML = "";
-
-      messageList.appendChild(
-        table
-      );
-
-    }
-
-
-    /* =====================================================
-       생일선물 제출 버튼
-       ===================================================== */
-
-    giftButton.addEventListener(
-      "click",
-      () => {
-
-        submitError.textContent =
-          "";
-
-        submitModal.classList.add(
-          "show"
-        );
-
-
-        setTimeout(
-          () => {
-
-            messageInput.focus();
-
-          },
-          100
-        );
-
-      }
-    );
-
-
-    /* =====================================================
-       제출창 닫기
-       ===================================================== */
-
-    closeSubmitButton.addEventListener(
-      "click",
-      () => {
-
-        submitModal.classList.remove(
-          "show"
-        );
-
-      }
-    );
-
-
-    /* =====================================================
-       압수물 구경하기
-       ===================================================== */
-
-    viewButton.addEventListener(
-      "click",
-      async () => {
-
-        viewModal.classList.add(
-          "show"
-        );
-
-        await loadMessages();
-
-      }
-    );
-
-
-    /* =====================================================
-       압수물 목록 닫기
-       ===================================================== */
-
-    closeViewButton.addEventListener(
-      "click",
-      () => {
-
-        viewModal.classList.remove(
-          "show"
-        );
-
-      }
-    );
-
-
-    /* =====================================================
-       제출하기
-       ===================================================== */
-
-    submitMessageButton.addEventListener(
-      "click",
-      submitMessage
-    );
-
-
-    /* =====================================================
-       Cmd + Enter로 제출
-       ===================================================== */
-
-    messageInput.addEventListener(
-      "keydown",
-      (event) => {
-
-        if (
-          (event.ctrlKey ||
-            event.metaKey) &&
-          event.key === "Enter"
-        ) {
-
-          submitMessage();
-
-        }
-
-      }
-    );
-
-
-    /* =====================================================
-       제출 모달 바깥쪽 클릭
-       ===================================================== */
-
-    submitModal.addEventListener(
-      "click",
-      (event) => {
-
-        if (
-          event.target ===
-          submitModal
-        ) {
-
-          submitModal.classList.remove(
-            "show"
-          );
-
-        }
-
-      }
-    );
-
-
-    /* =====================================================
-       압수물 모달 바깥쪽 클릭
-       ===================================================== */
-
-    viewModal.addEventListener(
-      "click",
-      (event) => {
-
-        if (
-          event.target ===
-          viewModal
-        ) {
-
-          viewModal.classList.remove(
-            "show"
-          );
-
-        }
-
-      }
-    );
-
-
-    /* =====================================================
-       사이트 처음 열었을 때
-       ===================================================== */
-
-    setBaekhoShower();
-
-    loadCount();
-
-  </script>
 
 </body>
 </html>
