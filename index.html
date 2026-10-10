@@ -154,7 +154,21 @@
     .view-button:hover {
       background: #ddd8cd;
     }
+/* 사건 종결 안내문 */
 
+.closed-notice {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 28px 16px;
+  margin: 20px 0;
+  background: #333333;
+  color: #ffffff;
+  border: 3px solid #333333;
+  text-align: center;
+  font-size: 24px;
+  font-weight: normal;
+  letter-spacing: 1px;
+}
 
     /* =====================================================
        모달
@@ -541,16 +555,9 @@
          버튼
          ===================================================== -->
 
-    <button id="giftButton">
-      🎁 생일선물 제출하기
-    </button>
-
-    <button
-      id="viewButton"
-      class="view-button">
-      📦 압수물 구경하기
-    </button>
-
+  <div class="closed-notice">
+  생일 사건 후속 조치 중
+</div>
 
     <!-- =====================================================
          푸터
@@ -838,45 +845,9 @@
 
     async function loadCount() {
 
-      const result =
-        await supabaseClient
-          .from("messages")
-          .select("*", {
-            count: "exact",
-            head: true
-          });
-
-
-      const count =
-        result.count;
-
-      const error =
-        result.error;
-
-
-      if (error) {
-
-        console.error(
-          "COUNT ERROR:",
-          error
-        );
-
-        countText.textContent =
-          "---";
-
-        return;
-
-      }
-
-
-      giftCount =
-        count || 0;
-
-
-      updateCount();
-
-    }
-
+async function loadCount() {
+  updateCount(200);
+}
 
     /* =====================================================
        메시지 제출
