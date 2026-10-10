@@ -95,7 +95,20 @@
       object-fit: fill;
       z-index: 1;
     }
+/* =====================================================
+   안내문 및 말풍선 이미지
+   ===================================================== */
 
+.notice-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  z-index: 2;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
 
     /* =====================================================
        숫자
@@ -491,16 +504,22 @@
          백호
          ===================================================== -->
 
-    <section class="scene">
+   
+<section class="scene">
+  <img
+    id="baekho"
+    class="baekho-image"
+    src="baekho_ani.gif"
+    alt="백호 검사실 정리 중"
+  >
 
-      <img
-        id="baekho"
-        class="baekho-image"
-        src="baekho_shower.png"
-        alt="샤워하고 온 백호"
-      >
+  <img
+    class="notice-overlay"
+    src="baekho_notice.png"
+    alt="압수물 과다 접수로 업무 지연 중"
+  >
+</section>
 
-    </section>
 
 
     <!-- =====================================================
